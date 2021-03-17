@@ -21,6 +21,7 @@ export class App {
   private frameBuf: WebGLFramebuffer;
   private clickedShape: Shape | null = null;
   private drawingShape: Shape | null = null;
+  private useShading: boolean = true;
 
   constructor(
     private canvas: HTMLCanvasElement,
@@ -103,6 +104,10 @@ export class App {
     // using the texture and depth buffer with frame buffer
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texBuf, 0);
     gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depBuf);
+  }
+
+  public setShading(shading: boolean) {
+    this.useShading = shading;
   }
 
   private initHitboxShader() {
@@ -228,10 +233,6 @@ export class App {
   }
 
   private onMouseMove(newPos: Point) {
-    const el = document.getElementById("coord");
-    if (el) {
-      el.innerText = JSON.stringify(newPos);
-    }
     this.mouseState.bef = this.mouseState.pos;
     this.mouseState.pos = newPos;
 

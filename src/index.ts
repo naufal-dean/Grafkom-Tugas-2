@@ -13,7 +13,7 @@ if (!gl) {
 }
 
 const bgColor: Color = [1, 1, 1];
-const size = [720, 720] as const;
+const size = [1080, 1080] as const;
 
 const newApp = () => new App(canvas, gl, ...size, bgColor, appColorManager);
 let app = newApp();

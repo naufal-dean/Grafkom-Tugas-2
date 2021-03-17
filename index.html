@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Grafkom Tubes-1</title>
+    <title>Grafkom Tubes 2</title>
     <link rel="stylesheet" href="bootstrap.min.css" />
     <link rel="stylesheet" href="./styles.css" />
     <script src="jquery-3.3.1.slim.min.js"></script>
@@ -14,7 +14,7 @@
   </head>
   <body>
     <div class="container-fluid text-center mt-4">
-      <h1>Denah Arsitektur Helper</h1>
+      <h1>Hollow Man</h1>
       <div class="card text-left">
         <div class="card-header d-flex">
           <h2 class="card-title font-weight-bold">Denah</h2>
@@ -33,13 +33,13 @@
             <div class="card-header">Menu</div>
             <div class="card-body">
               <button class="btn btn-primary" id="select">Select</button>
-              <button class="btn btn-primary" id="line">Line</button>
-              <button class="btn btn-primary" id="square">Square</button>
-              <button class="btn btn-primary" id="polygon">Polygon</button>
+              <button class="btn btn-primary" id="line">Pyramid</button>
+              <button class="btn btn-primary" id="square">Cube</button>
+              <button class="btn btn-primary" id="polygon">Block</button>
               <div class="rgb-input border-dark border p-3 my-2">
-                <h4 class="mb-3">RGB Input</h4>
+                <h4 class="mb-3">Colors:</h4>
                 <p class="color-secondary">
-                  Masukan angka antara 1-255 untuk mengubah warna shape yang dipilih
+                  Masukan angka antara 1-255 untuk mengubah warna shape yang dipilih (value rgb)
                 </p>
                 <input
                   value="0"
@@ -70,11 +70,23 @@
                 /><br />
                 <button id="rgb-set-btn" class="btn mt-2" style="color: white">Set</button>
               </div>
-              <p>Koordinat: <span id="coord">(p, p)</span></p>
+              <div class="form-group d-flex align-items-center">
+                <input type="checkbox" id="shading" />
+                <label class="form-label ml-2" for="shading">use shading</label>
+              </div>
+              <div class="border-dark border p-3 my-2">
+                <h4>Transformasi</h4>
+              </div>
+              <div class="border-dark border p-3 my-2">
+                <h4>Jenis Proyeksi</h4>
+              </div>
+              <div class="border-dark border p-3 my-2">
+                <h4>Change Distance</h4>
+              </div>
               <input type="file" id="file" />
               <button class="btn btn-dark" id="load">Load</button>
               <div class="mt-4">
-                <button class="btn btn-dark" id="save">Save Denah</button>
+                <button class="btn btn-dark" id="save">Save Hollow Object</button>
               </div>
             </div>
           </div>

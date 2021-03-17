@@ -4,6 +4,21 @@ type AbstractContructorParameters<T> = ConstructorParameters<AbstractConstructor
 type Point = [number, number];
 type Color = [number, number, number];
 
+type CubeInstance = {
+  size: number;
+};
+
+type PyramidInstance = {
+  height: number;
+  base: number; //alas
+};
+
+type BlockInstance = {
+  height: number;
+  width: number;
+  length: number;
+};
+
 type LineInstance = {
   p0: Point;
   p1: Point;
