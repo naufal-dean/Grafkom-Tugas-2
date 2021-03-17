@@ -30,10 +30,10 @@ export abstract class Shape {
         `
           precision mediump float;
 
-          attribute vec3 position;
+          attribute vec2 position;
 
           void main() {
-            gl_Position = vec4(position, 1);
+            gl_Position = vec4(position, 0, 1);
           }
         `,
       ),
