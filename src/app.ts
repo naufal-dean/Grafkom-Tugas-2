@@ -53,7 +53,7 @@ class App {
       }
       let new_scale = this.shape.getTransformation("scale");
       const zoomVal = val / 10;
-      new_scale = [zoomVal, zoomVal, 0];
+      new_scale = [zoomVal, zoomVal, zoomVal];
       this.shape?.setTransformation("scale", new_scale);
     });
   }

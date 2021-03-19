@@ -12,8 +12,8 @@ class Cube extends Shape {
 
     this.changePosition(vertexData);
     this.setColor([
-      [0, 0, 0],
-      [0, 0, 0],
+      [255, 0, 0],
+      [0, 215, 0],
       [0, 0, 0],
     ]);
 
