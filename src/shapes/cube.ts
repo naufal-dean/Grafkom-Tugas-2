@@ -28,6 +28,9 @@ class Cube extends Shape {
     this.gl.uniformMatrix4fv(viewMatrixPos, false, viewMatrix);
     this.gl.uniformMatrix4fv(projMatrixPos, false, projMatrix);
 
+    // loop to draw cube side(rusuk), each as a rectangle.
+    // To draw a rectangle needs 4 points, and each cube' face(sisi) has 4 side,
+    // In total 6 faces x 4 sides = 24.
     for (var i = 0; i < 24; i++) {
       this.render(this.gl.TRIANGLE_FAN, 4 * i, 4);
     }
