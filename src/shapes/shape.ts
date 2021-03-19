@@ -39,8 +39,8 @@ abstract class Shape {
   }
 
   constructor(protected canvas: HTMLCanvasElement) {
-    canvas.width = 400;
-    canvas.height = 400;
+    canvas.width = 800;
+    canvas.height = 800;
     this.gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
     this.gl.viewport(0, 0, canvas.width, canvas.height);
     this.program = this.createProgram();
