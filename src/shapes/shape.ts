@@ -92,8 +92,8 @@ abstract class Shape {
     );
   }
 
-  public render(mode: number, size: number) {
-    this.gl.drawArrays(mode, 0, size);
+  public render(mode: number, startingIdx: number, size: number) {
+    this.gl.drawArrays(mode, startingIdx, size);
   }
 
   public addPoint(...points: Point[]) {

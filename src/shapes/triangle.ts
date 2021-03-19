@@ -11,6 +11,7 @@ class Triangle extends Shape {
     const gl = this.gl;
     //prettier-ignore
     const vertexData = this.getPointsFlat();
+
     this.changePosition(vertexData);
     this.setColor([
       [255, 1, 0],
@@ -28,7 +29,7 @@ class Triangle extends Shape {
     this.gl.uniformMatrix4fv(viewMatrixPos, false, viewMatrix);
     this.gl.uniformMatrix4fv(projMatrixPos, false, projMatrix);
 
-    this.render(this.gl.TRIANGLES, this.points.length);
+    this.render(this.gl.TRIANGLES, 0, this.points.length);
   }
 }
 
