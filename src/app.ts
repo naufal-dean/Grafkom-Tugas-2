@@ -21,6 +21,14 @@ class App {
       rotation[index] = degree;
       this.shape.setTransformation("rotate", rotation);
     };
+    const changeTranslateOf = (index: number, val: number) => {
+      if (!this.shape) {
+        return;
+      }
+      const new_val = this.shape?.getTransformation("translate");
+      new_val[index] = (val - 50) / 100;
+      this.shape?.setTransformation("translate", new_val);
+    };
     SliderManager.assignInputEvent("rotate-x", (val: number) => {
       changeRotateOf(X, val);
     });
@@ -29,6 +37,24 @@ class App {
     });
     SliderManager.assignInputEvent("rotate-z", (val: number) => {
       changeRotateOf(Z, val);
+    });
+    SliderManager.assignInputEvent("x", (val: number) => {
+      changeTranslateOf(X, val);
+    });
+    SliderManager.assignInputEvent("y", (val: number) => {
+      changeTranslateOf(Y, val);
+    });
+    SliderManager.assignInputEvent("z", (val: number) => {
+      changeTranslateOf(Z, val);
+    });
+    SliderManager.assignInputEvent("zoom", (val: number) => {
+      if (!this.shape) {
+        return;
+      }
+      let new_scale = this.shape.getTransformation("scale");
+      const zoomVal = val / 10;
+      new_scale = [zoomVal, zoomVal, 0];
+      this.shape?.setTransformation("scale", new_scale);
     });
   }
 

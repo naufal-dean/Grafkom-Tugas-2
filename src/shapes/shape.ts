@@ -9,7 +9,7 @@ abstract class Shape {
   protected translate: Point = [0, 0, 0];
   protected rotate: Point = [0, 0, 0];
   protected scale: Point = [1, 1, 1];
-  protected zoom: number = 50;
+  protected zoom: number = 1;
   protected projMatrix: number[] = mat4.identity();
 
   public setTransformation(transformationType: Transformation, newArr: Point) {
