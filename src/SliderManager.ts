@@ -9,6 +9,18 @@ type SliderIndicator = {
   [sliderId: string]: HTMLSpanElement;
 };
 const sliderIndicators: SliderIndicator = {};
+type SliderDefaultValue = {
+  [sliderId: string]: number;
+};
+const sliderDefaultValues: SliderDefaultValue = {
+  "x": 50,
+  "y": 50,
+  "z": 50,
+  "rotate-x": 0,
+  "rotate-y": 0,
+  "rotate-z": 0,
+  "zoom": 1,
+};
 
 sliderIds.forEach((sliderId) => {
   sliders[sliderId] = document.getElementById(sliderId) as HTMLInputElement;
@@ -28,6 +40,13 @@ class SliderManager {
       sliderIndicators[`${elmt.id}-value`].innerText = value;
       callback(value);
     };
+  }
+
+  static resetSliderValue() {
+    sliderIds.forEach((sliderId) => {
+      sliders[sliderId].value = sliderDefaultValues[sliderId];
+      sliders[sliderId].dispatchEvent(new Event("input"));
+    });
   }
 }
 export default SliderManager;

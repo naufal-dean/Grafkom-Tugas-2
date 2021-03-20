@@ -9,7 +9,7 @@ class App {
   private shape: Shape | null = null;
 
   constructor() {}
-  
+
   initSliders() {
     if (!this.shape) {
       return;
@@ -35,10 +35,7 @@ class App {
       if (!this.shape) {
         return;
       }
-      let newScale = this.shape.getTransformation("scale");
-      const zoomVal = val / 10;
-      newScale = [zoomVal, zoomVal, zoomVal];
-      this.shape.setTransformation("scale", newScale);
+      this.shape.setTransformation("scale", [val, val, val]);
     }
 
     SliderManager.assignInputEvent("rotate-x", (val: number) => {
@@ -78,6 +75,10 @@ class App {
 
   setShape(shape: Shape) {
     this.shape = shape;
+  }
+
+  resetShape() {
+    SliderManager.resetSliderValue();
   }
 }
 

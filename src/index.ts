@@ -14,7 +14,7 @@ triangularPrism.addPoint(...triangularPrismPoints);
 const app = new App();
 app.setShape(triangularPrism);
 
-// Event handler
+// Pick hollow object event handler
 const prismBtn = document.getElementById("prism") as HTMLElement;
 prismBtn.addEventListener("click", () => {
   const triangularPrism = new TriangularPrism(canvas);
@@ -29,6 +29,12 @@ cubeBtn.addEventListener("click", () => {
   cube.addPoint(...cubePoints);
 
   app.setShape(cube);
+});
+
+// Reset event handler
+const resetBtn = document.getElementById("reset") as HTMLElement;
+resetBtn.addEventListener("click", () => {
+  app.resetShape();
 });
 
 // Start app
