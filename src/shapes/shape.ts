@@ -82,11 +82,11 @@ abstract class Shape {
 
   protected calculateProjMatrix() {
     this.projMatrix = mat4.mMult(
-      mat4.scale(...this.scale),
-      mat4.translation(...this.translate),
       mat4.xRotation(this.rotate[0]),
       mat4.yRotation(this.rotate[1]),
       mat4.zRotation(this.rotate[2]),
+      mat4.scale(...this.scale),
+      mat4.translation(...this.translate),
     );
   }
 
