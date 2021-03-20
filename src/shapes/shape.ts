@@ -10,6 +10,7 @@ abstract class Shape {
   protected rotate: Point = [0, 0, 0];
   protected scale: Point = [1, 1, 1];
   protected zoom: number = 1;
+  protected transformMatrix: number[] = mat4.identity();
   protected projMatrix: number[] = mat4.identity();
 
   constructor(protected canvas: HTMLCanvasElement) {
@@ -29,13 +30,14 @@ abstract class Shape {
       attribute vec3 position;
       attribute vec3 vertColor;
       varying vec3 fragColor;
+      uniform mat4 mTransform;
       uniform mat4 mWorld;
       uniform mat4 mView;
       uniform mat4 mProj;
 
       void main() {
         fragColor = vertColor;
-        gl_Position = mProj * mView * mWorld * vec4(position, 1);
+        gl_Position = mProj * mView * mWorld * mTransform * vec4(position, 1);
       }
       `,
     );
@@ -66,7 +68,7 @@ abstract class Shape {
         this.translate = newArr;
         break;
     }
-    this.calculateProjMatrix();
+    this.calculateTransformMatrix();
   }
 
   public getTransformation(transformationType: Transformation) {
@@ -80,8 +82,8 @@ abstract class Shape {
     }
   }
 
-  protected calculateProjMatrix() {
-    this.projMatrix = mat4.mMult(
+  protected calculateTransformMatrix() {
+    this.transformMatrix = mat4.mMult(
       mat4.xRotation(this.rotate[0]),
       mat4.yRotation(this.rotate[1]),
       mat4.zRotation(this.rotate[2]),
@@ -89,6 +91,8 @@ abstract class Shape {
       mat4.translation(...this.translate),
     );
   }
+
+  // TODO: implement setProjection
 
   public render(mode: number, startingIdx: number, size: number) {
     this.gl.drawArrays(mode, startingIdx, size);
