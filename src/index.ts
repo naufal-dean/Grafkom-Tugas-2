@@ -14,7 +14,7 @@ triangularPrism.addPoint(...triangularPrismPoints);
 const app = new App();
 app.setShape(triangularPrism);
 
-// Pick hollow object event handler
+// Pick hollow object buttons event handler
 const prismBtn = document.getElementById("prism") as HTMLElement;
 prismBtn.addEventListener("click", () => {
   const triangularPrism = new TriangularPrism(canvas);
@@ -31,7 +31,23 @@ cubeBtn.addEventListener("click", () => {
   app.setShape(cube);
 });
 
-// Reset event handler
+// Perspective buttons event handler
+const orthographicBtn = document.getElementById("orthographic") as HTMLElement;
+orthographicBtn.addEventListener("click", () => {
+  app.setShapeProjection("orthographic");
+});
+
+const obliqueBtn = document.getElementById("oblique") as HTMLElement;
+obliqueBtn.addEventListener("click", () => {
+  app.setShapeProjection("oblique");
+});
+
+const perspectiveBtn = document.getElementById("perspective") as HTMLElement;
+perspectiveBtn.addEventListener("click", () => {
+  app.setShapeProjection("perspective");
+});
+
+// Reset button event handler
 const resetBtn = document.getElementById("reset") as HTMLElement;
 resetBtn.addEventListener("click", () => {
   app.resetShape();

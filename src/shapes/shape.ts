@@ -1,5 +1,6 @@
 import {mat4} from "../util/matrix";
 type Transformation = "translate" | "rotate" | "scale";
+type Projection = "orthographic" | "oblique" | "perspective";
 
 abstract class Shape {
   protected gl: WebGL2RenderingContext;
@@ -67,6 +68,8 @@ abstract class Shape {
       case "translate":
         this.translate = newArr;
         break;
+      default:
+        throw `Invalid transformation type '${transformationType}' on setTransformation`;
     }
     this.calculateTransformMatrix();
   }
@@ -79,6 +82,8 @@ abstract class Shape {
         return this.scale;
       case "translate":
         return this.translate;
+      default:
+        throw `Invalid transformation type '${transformationType}' on getTransformation`;
     }
   }
 
@@ -92,7 +97,22 @@ abstract class Shape {
     );
   }
 
-  // TODO: implement setProjection
+  // TODO: define correct projection matrix
+  public setProjection(projectionType: Projection) {
+    switch (projectionType) {
+      case "orthographic":
+        this.projMatrix = mat4.identity();
+        break;
+      case "oblique":
+        this.projMatrix = mat4.identity();
+        break;
+      case "perspective":
+        this.projMatrix = mat4.identity();
+        break;
+      default:
+        throw `Invalid projection type '${projectionType}' on setProjection`;
+    }
+  }
 
   public render(mode: number, startingIdx: number, size: number) {
     this.gl.drawArrays(mode, startingIdx, size);

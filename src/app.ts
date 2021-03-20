@@ -80,6 +80,10 @@ class App {
   resetShape() {
     SliderManager.resetSliderValue();
   }
+
+  setShapeProjection(projectionType: string) {
+    this.shape.setProjection(projectionType);
+  }
 }
 
 export default App;
