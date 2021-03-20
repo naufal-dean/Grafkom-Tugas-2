@@ -12,6 +12,48 @@ abstract class Shape {
   protected zoom: number = 1;
   protected projMatrix: number[] = mat4.identity();
 
+  constructor(protected canvas: HTMLCanvasElement) {
+    canvas.width = 800;
+    canvas.height = 800;
+    this.gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
+    this.gl.viewport(0, 0, canvas.width, canvas.height);
+    this.program = this.createProgram();
+    this.initMainShader(this.program);
+  }
+
+  protected initMainShader(program: WebGLProgram) {
+    const gl = this.gl;
+    const vShader = this.createCompiledShader(
+      gl.VERTEX_SHADER,
+      `
+      attribute vec3 position;
+      attribute vec3 vertColor;
+      varying vec3 fragColor;
+      uniform mat4 mWorld;
+      uniform mat4 mView;
+      uniform mat4 mProj;
+
+      void main() {
+        fragColor = vertColor;
+        gl_Position = mProj * mView * mWorld * vec4(position, 1);
+      }
+      `,
+    );
+    const fShader = this.createCompiledShader(
+      gl.FRAGMENT_SHADER,
+      `
+      precision mediump float;
+
+      varying vec3 fragColor;
+
+      void main() {
+        gl_FragColor = vec4(fragColor,1);
+      }
+      `,
+    );
+    this.setupProgram(program, vShader, fShader);
+  }
+
   public setTransformation(transformationType: Transformation, newArr: Point) {
     switch (transformationType) {
       case "rotate":
@@ -37,50 +79,6 @@ abstract class Shape {
         return this.translate;
     }
   }
-
-  constructor(protected canvas: HTMLCanvasElement) {
-    canvas.width = 800;
-    canvas.height = 800;
-    this.gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
-    this.gl.viewport(0, 0, canvas.width, canvas.height);
-    this.program = this.createProgram();
-    this.initMainShader(this.program);
-  }
-
-  protected initMainShader(program: WebGLProgram) {
-    const gl = this.gl;
-    const vShader = this.createCompiledShader(
-      gl.VERTEX_SHADER,
-      `
-    attribute vec3 position;
-    attribute vec3 vertColor;
-    varying vec3 fragColor;
-    uniform mat4 mWorld;
-    uniform mat4 mView;
-    uniform mat4 mProj;
-
-    void main() {
-      fragColor = vertColor;
-      gl_Position = mProj * mView * mWorld * vec4(position, 1);
-    }
-    `,
-    );
-    const fShader = this.createCompiledShader(
-      gl.FRAGMENT_SHADER,
-      `
-      precision mediump float;
-
-      varying vec3 fragColor;
-
-      void main() {
-        gl_FragColor = vec4(fragColor,1);
-      }
-    `,
-    );
-    this.setupProgram(program, vShader, fShader);
-  }
-
-  // TODO: protected setTransformation()
 
   protected calculateProjMatrix() {
     this.projMatrix = mat4.mMult(

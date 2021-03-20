@@ -31,4 +31,5 @@ cubeBtn.addEventListener("click", () => {
   app.setShape(cube);
 });
 
+// Start app
 app.start();

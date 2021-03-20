@@ -9,26 +9,38 @@ class App {
   private shape: Shape | null = null;
 
   constructor() {}
+  
   initSliders() {
     if (!this.shape) {
       return;
     }
+
     const changeRotateOf = (index: number, degree: number) => {
       if (!this.shape) {
         return;
       }
-      const rotation = this.shape.getTransformation("rotate");
-      rotation[index] = degree;
-      this.shape.setTransformation("rotate", rotation);
+      const newRotation = this.shape.getTransformation("rotate");
+      newRotation[index] = degree;
+      this.shape.setTransformation("rotate", newRotation);
     };
     const changeTranslateOf = (index: number, val: number) => {
       if (!this.shape) {
         return;
       }
-      const new_val = this.shape?.getTransformation("translate");
-      new_val[index] = (val - 50) / 100;
-      this.shape?.setTransformation("translate", new_val);
+      const newVal = this.shape.getTransformation("translate");
+      newVal[index] = (val - 50) / 100;
+      this.shape.setTransformation("translate", newVal);
     };
+    const changeZoomOf = (val: number) => {
+      if (!this.shape) {
+        return;
+      }
+      let newScale = this.shape.getTransformation("scale");
+      const zoomVal = val / 10;
+      newScale = [zoomVal, zoomVal, zoomVal];
+      this.shape.setTransformation("scale", newScale);
+    }
+
     SliderManager.assignInputEvent("rotate-x", (val: number) => {
       changeRotateOf(X, val);
     });
@@ -48,13 +60,7 @@ class App {
       changeTranslateOf(Z, val);
     });
     SliderManager.assignInputEvent("zoom", (val: number) => {
-      if (!this.shape) {
-        return;
-      }
-      let new_scale = this.shape.getTransformation("scale");
-      const zoomVal = val / 10;
-      new_scale = [zoomVal, zoomVal, zoomVal];
-      this.shape?.setTransformation("scale", new_scale);
+      changeZoomOf(val);
     });
   }
 
