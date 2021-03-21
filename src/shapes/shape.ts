@@ -104,7 +104,7 @@ abstract class Shape {
         this.projMatrix = mat4.orthographicProjMatrix();
         break;
       case "oblique":
-        this.projMatrix = mat4.identity();
+        this.projMatrix = mat4.obliqueProjMatrix();
         break;
       case "perspective":
         this.projMatrix = mat4.identity();
