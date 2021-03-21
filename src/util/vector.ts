@@ -23,6 +23,14 @@ class vec {
     return res;
   }
 
+  static mul = (k: number, v: number[]) => {
+    let res = [];
+    for (const el of v) {
+      res.push(k * el);
+    }
+    return res;
+  }
+
   static dot = (v1: number[], v2: number[]) => {
     if (v1.length != v2.length) {
       throw "vec.dot: vector length must be equal";
@@ -50,8 +58,19 @@ class vec {
     ];
   }
 
+  static equal = (v1: number[], v2: number[]) => {
+    if (v1.length != v2.length) {
+      return false;
+    }
+
+    for (let i = 0; i < v1.length; i++) {
+      if (v1[i] != v2[i]) return false;
+    }
+    return true;
+  }
+
   static len = (v: number[]) => {
-    return Math.sqrt(vec.dot(v));
+    return Math.sqrt(vec.dot(v, v));
   }
 
   static normalize = (v: number[]) => {
