@@ -1,16 +1,28 @@
+import {toCartesian} from "../util/convert";
 import {mat4} from "../util/matrix";
 type Transformation = "translate" | "rotate" | "scale";
 type Projection = "orthographic" | "oblique" | "perspective";
+type CameraSetting = "radius" | "theta" | "phi";
 
 abstract class Shape {
+  // Webgl properties
   protected gl: WebGL2RenderingContext;
-  protected dimention: number = 3;
   protected program: WebGLProgram;
+
+  // Shape properties
+  protected dimention: number = 3;
   protected points: Point[] = [];
+
+  // Object transformations
   protected translate: Point = [0, 0, 0];
   protected rotate: Point = [0, 0, 0];
   protected scale: Point = [1, 1, 1];
   protected zoom: number = 1;
+
+  // Camera position or eye value (in spherical coordinate), format: (radius, theta, phi)
+  protected cameraPosition: [number, number, number] = [0, 0, 0];
+
+  // Matrices used
   protected transformMatrix: number[] = mat4.identity();
   protected viewMatrix: number[] = mat4.identity();
   protected projMatrix: number[] = mat4.orthographicProj();
@@ -18,10 +30,14 @@ abstract class Shape {
   constructor(protected canvas: HTMLCanvasElement) {
     canvas.width = 800;
     canvas.height = 800;
+
     this.gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
     this.gl.viewport(0, 0, canvas.width, canvas.height);
     this.program = this.createProgram();
     this.initMainShader(this.program);
+
+    this.calculateTransformMatrix();
+    this.calculateViewMatrix();
   }
 
   protected initMainShader(program: WebGLProgram) {
@@ -70,7 +86,7 @@ abstract class Shape {
         this.translate = newArr;
         break;
       default:
-        throw `Invalid transformation type '${transformationType}' on setTransformation`;
+        throw `shape.setTransformation: invalid transformation type '${transformationType}'`;
     }
     this.calculateTransformMatrix();
   }
@@ -84,7 +100,7 @@ abstract class Shape {
       case "translate":
         return this.translate;
       default:
-        throw `Invalid transformation type '${transformationType}' on getTransformation`;
+        throw `shape.getTransformation: invalid transformation type '${transformationType}'`;
     }
   }
 
@@ -110,8 +126,35 @@ abstract class Shape {
         this.projMatrix = mat4.perspectiveProj();
         break;
       default:
-        throw `Invalid projection type '${projectionType}' on setProjection`;
+        throw `shape.setProjection: invalid projection type '${projectionType}'`;
     }
+  }
+
+  public setCamera(cameraSettingType: CameraSetting, newValue: number) {
+    // Notes: newValue can be radius, theta (in degree), and phi (in degree)
+
+    switch (cameraSettingType) {
+      case "radius":
+        this.cameraPosition[0] = newValue;
+        break;
+      case "theta":
+        this.cameraPosition[1] = newValue;
+        break;
+      case "phi":
+        this.cameraPosition[2] = newValue;
+        break;
+      default:
+        throw `shape.setCamera: invalid camera setting type '${cameraSettingType}'`;
+    }
+    this.calculateViewMatrix();
+  }
+
+  protected calculateViewMatrix() {
+    console.log(toCartesian(this.cameraPosition));
+
+    this.viewMatrix = mat4.lookAt(toCartesian(this.cameraPosition));
+
+    console.log(this.viewMatrix);
   }
 
   public render(mode: number, startingIdx: number, size: number) {
@@ -132,7 +175,7 @@ abstract class Shape {
     const gl = this.gl;
     const real_color = this.mapColor(colors.flat());
     const colorBuffer = gl.createBuffer();
-    if (!colorBuffer) throw "no color buffer error";
+    if (!colorBuffer) throw "shape.setColor: no color buffer error";
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(real_color), gl.STATIC_DRAW);
 
@@ -167,7 +210,7 @@ abstract class Shape {
     const shader = gl.createShader(type);
     if (!shader) {
       const shaderTypeString = type == gl.VERTEX_SHADER ? "vertex" : "fragment";
-      throw `Error while creating ${shaderTypeString} shader`;
+      throw `shape.createCompiledShader: error while creating ${shaderTypeString} shader`;
     }
     gl.shaderSource(shader, sourceCode);
     gl.compileShader(shader);
@@ -184,7 +227,7 @@ abstract class Shape {
   createProgram() {
     const program = this.gl.createProgram();
     if (!program) {
-      throw "No program!";
+      throw "shape.createProgram: no program!";
     }
     return program;
   }
