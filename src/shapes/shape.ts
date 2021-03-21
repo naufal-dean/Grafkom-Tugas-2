@@ -12,7 +12,8 @@ abstract class Shape {
   protected scale: Point = [1, 1, 1];
   protected zoom: number = 1;
   protected transformMatrix: number[] = mat4.identity();
-  protected projMatrix: number[] = mat4.orthographicProjMatrix();
+  protected viewMatrix: number[] = mat4.identity();
+  protected projMatrix: number[] = mat4.orthographicProj();
 
   constructor(protected canvas: HTMLCanvasElement) {
     canvas.width = 800;
@@ -100,13 +101,13 @@ abstract class Shape {
   public setProjection(projectionType: Projection) {
     switch (projectionType) {
       case "orthographic":
-        this.projMatrix = mat4.orthographicProjMatrix();
+        this.projMatrix = mat4.orthographicProj();
         break;
       case "oblique":
-        this.projMatrix = mat4.obliqueProjMatrix();
+        this.projMatrix = mat4.obliqueProj();
         break;
       case "perspective":
-        this.projMatrix = mat4.perspectiveProjMatrix();
+        this.projMatrix = mat4.perspectiveProj();
         break;
       default:
         throw `Invalid projection type '${projectionType}' on setProjection`;

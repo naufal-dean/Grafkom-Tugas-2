@@ -1,3 +1,6 @@
+import {vec} from "./vector";
+
+type Point = [number, number, number];
 type Matrix = number[];
 
 const toRadian = (degree: number) => (degree * Math.PI) / 180;
@@ -14,6 +17,11 @@ class mat4 {
       0,  0,  0,  1
     ];
   }
+
+
+  /*
+   * Transformation matrices
+   */
 
   static scale = (s1: number, s2: number, s3: number) => {
     // prettier-ignore
@@ -77,6 +85,93 @@ class mat4 {
     ];
   }
 
+
+  /*
+   * Projection matrices
+   */
+
+  static orthographicProj = (left: number = -1, right: number = 1,
+      bottom: number = -1, top: number = 1, near: number = -1, far: number = 1) => {
+
+    // Initial check
+    if (left == right || bottom == top || near == far) {
+      throw "mat4.orthographicProj: invalid parameter(s)";
+    }
+
+    // Calculate width, height, and depth
+    // Notes: far and near coordinates is reversed from z axis (z+ is -, vice versa)
+    const width = right - left;
+    const height = top - bottom;
+    const depth = far - near;
+
+    // prettier-ignore
+    return [
+      2 / width, 0, 0, 0,
+      0, 2 / height, 0, 0,
+      0, 0, -2 / depth, 0,
+      - (left + right) / width, - (top + bottom) / width, - (near + far) / depth,  1
+    ];
+  }
+
+  static obliqueProj = (theta: number = 70, phi: number = 70, left: number = -1, right: number = 1,
+      bottom: number = -1, top: number = 1, near: number = -1, far: number = 1) => {
+    // Notes: theta and phi is in degree, it is assumed that the cot of theta and phi is not infinity
+
+    // Convert theta and phi to radian
+    const ctgTheta = 1 / Math.tan(toRadian(theta));
+    const ctgPhi = 1 / Math.tan(toRadian(phi));
+
+    // Oblique == shear + orthographic
+    // prettier-ignore
+    return mat4.multiply(
+      mat4.orthographicProj(),
+      [
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        -ctgTheta, -ctgPhi, 1, 0,
+        0, 0, 0, 1,
+      ]
+    );
+  }
+
+  static perspectiveProj = (fov: number = 90, aspect: number = 1, near: number = 0, far: number = 3) => {
+    // Notes: fov is in degree, it is assumed that the cot of fov is not infinity
+
+    const ctgHalfFov = 1 / Math.tan(toRadian(fov) / 2);
+    const depth = far - near;
+
+    // prettier-ignore
+    return [
+      ctgHalfFov / aspect, 0, 0, 0,
+      0, ctgHalfFov, 0, 0,
+      0, 0, - (near + far) / depth, -1,
+      0, 0, -2 * near * far / depth, 0,
+    ];
+  }
+
+
+  /*
+   * View matrix (used to control the camera)
+   */
+
+  static lookAt = (eye: Point, target: Point, up: Point = [0, 1, 0]) => {
+    const za = vec.normalize(vec.sub(eye, target));
+    const xa = vec.normalize(vec.cross(up, za));
+    const ya = vec.normalize(vec.cross(za, xa));
+
+    return [
+       xa[0], xa[1], xa[2], 0,
+       ya[0], ya[1], ya[2], 0,
+       za[0], za[1], za[2], 0,
+       eye[0], eye[1], eye[2], 1,
+    ];
+  }
+
+
+  /*
+   * Utilities
+   */
+
   static multiply = (matA: Matrix, matB: Matrix): Matrix => {
     const out = [];
     for (let i = 0; i < mat4.dimention; i++) {
@@ -97,81 +192,6 @@ class mat4 {
       temp = mat4.multiply(temp, args[i]);
     }
     return temp;
-  }
-
-  static orthographicProjMatrix = (left: number = -1, right: number = 1,
-      bottom: number = -1, top: number = 1, near: number = -1, far: number = 1) => {
-
-    // Initial check
-    if (left == right || bottom == top || near == far) {
-      throw "Invalid parameter(s)";
-    }
-
-    // Calculate width, height, and depth
-    // Notes: far and near coordinates is reversed from z axis (z+ is -, vice versa)
-    const width = right - left;
-    const height = top - bottom;
-    const depth = far - near;
-
-    // prettier-ignore
-    return [
-      2 / width, 0, 0, 0,
-      0, 2 / height, 0, 0,
-      0, 0, -2 / depth, 0,
-      - (left + right) / width, - (top + bottom) / width, - (near + far) / depth,  1
-    ];
-  }
-
-  static obliqueProjMatrix = (theta: number = 70, phi: number = 70, left: number = -1, right: number = 1,
-      bottom: number = -1, top: number = 1, near: number = -1, far: number = 1) => {
-    // Notes: theta and phi is in degree, it is assumed that the cot of theta and phi is not infinity
-
-    // Initial check
-    if (left == right || bottom == top || near == far) {
-      throw "Invalid parameter(s)";
-    }
-
-    // Convert theta and phi to radian
-    const ctgTheta = 1 / Math.tan(toRadian(theta));
-    const ctgPhi = 1 / Math.tan(toRadian(phi));
-
-    // Oblique == shear + orthographic
-    // prettier-ignore
-    return mat4.multiply(
-      mat4.orthographicProjMatrix(),
-      [
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        -ctgTheta, -ctgPhi, 1, 0,
-        0, 0, 0, 1,
-      ]
-    );
-  }
-
-  static perspectiveProjMatrix = (fov: number = 90, aspect: number = 1, near: number = 0, far: number = 3) => {
-    // Notes: fov is in degree, it is assumed that the cot of fov is not infinity
-
-    const ctgHalfFov = 1 / Math.tan(toRadian(fov) / 2);
-    const depth = far - near;
-
-    // prettier-ignore
-    return [
-      ctgHalfFov / aspect, 0, 0, 0,
-      0, ctgHalfFov, 0, 0,
-      0, 0, - (near + far) / depth, -1,
-      0, 0, -2 * near * far / depth, 0,
-    ];
-  }
-
-  static projection = (width: number, height: number, depth: number) => {
-    // Note: This matrix flips the Y axis so 0 is at the top.
-    // prettier-ignore
-    return [
-      2 / width, 0, 0, 0,
-      0, -2 / height, 0, 0,
-      0, 0, 2 / depth, 0,
-     -1, 1, 0, 1,
-   ];
   }
 }
 
