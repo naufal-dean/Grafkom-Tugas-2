@@ -150,11 +150,7 @@ abstract class Shape {
   }
 
   protected calculateViewMatrix() {
-    console.log(toCartesian(this.cameraPosition));
-
     this.viewMatrix = mat4.lookAt(toCartesian(this.cameraPosition));
-
-    console.log(this.viewMatrix);
   }
 
   public render(mode: number, startingIdx: number, size: number) {
