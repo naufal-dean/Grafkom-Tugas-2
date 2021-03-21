@@ -50,14 +50,14 @@ class vec {
     ];
   }
 
-  static length = (v: number[]) => {
+  static len = (v: number[]) => {
     return Math.sqrt(vec.dot(v));
   }
 
   static normalize = (v: number[]) => {
     // Notes: the input array is not preserved, it is assumed that the length of v is not 0
 
-    const vLength = vec.length(v);
+    const vLength = vec.len(v);
     for (let i = 0; i < v.length; i++) {
       v[i] /= vLength;
     }
