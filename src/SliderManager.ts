@@ -1,5 +1,7 @@
-type SliderId = "x" | "y" | "z" | "rotate-x" | "rotate-y" | "rotate-z" | "zoom";
-const sliderIds: SliderId[] = ["x", "y", "z", "rotate-x", "rotate-y", "rotate-z", "zoom"];
+type SliderId = "x" | "y" | "z" | "rotate-x" | "rotate-y" | "rotate-z" | "zoom" |
+                "cam-radius" | "cam-theta" | "cam-phi";
+const sliderIds: SliderId[] = ["x", "y", "z", "rotate-x", "rotate-y", "rotate-z", "zoom",
+                "cam-radius", "cam-theta", "cam-phi"];
 
 type Sliders = {
   [sliderId: string]: HTMLInputElement;
@@ -12,7 +14,7 @@ const sliderIndicators: SliderIndicator = {};
 type SliderDefaultValue = {
   [sliderId: string]: number;
 };
-const sliderDefaultValues: SliderDefaultValue = {
+const tSliderDefaultValues: SliderDefaultValue = {
   "x": 50,
   "y": 50,
   "z": 50,
@@ -20,6 +22,11 @@ const sliderDefaultValues: SliderDefaultValue = {
   "rotate-y": 0,
   "rotate-z": 0,
   "zoom": 1,
+};
+const cSliderDefaultValues: SliderDefaultValue = {
+  "cam-radius": 0,
+  "cam-theta": 0,
+  "cam-phi": 0,
 };
 
 sliderIds.forEach((sliderId) => {
@@ -42,10 +49,21 @@ class SliderManager {
     };
   }
 
-  static resetSliderValue() {
+  static resetTransformSliderValue() {
     sliderIds.forEach((sliderId) => {
-      sliders[sliderId].value = sliderDefaultValues[sliderId];
-      sliders[sliderId].dispatchEvent(new Event("input"));
+      if (tSliderDefaultValues.hasOwnProperty(sliderId)) {
+        sliders[sliderId].value = tSliderDefaultValues[sliderId];
+        sliders[sliderId].dispatchEvent(new Event("input"));
+      }
+    });
+  }
+
+  static resetCameraSliderValue() {
+    sliderIds.forEach((sliderId) => {
+      if (cSliderDefaultValues.hasOwnProperty(sliderId)) {
+        sliders[sliderId].value = cSliderDefaultValues[sliderId];
+        sliders[sliderId].dispatchEvent(new Event("input"));
+      }
     });
   }
 }

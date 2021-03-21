@@ -21,7 +21,7 @@ prismBtn.addEventListener("click", () => {
   triangularPrism.addPoint(...triangularPrismPoints);
 
   app.setShape(triangularPrism);
-  app.resetShape();
+  app.resetAll();
 });
 
 const cubeBtn = document.getElementById("cube") as HTMLElement;
@@ -30,7 +30,7 @@ cubeBtn.addEventListener("click", () => {
   cube.addPoint(...cubePoints);
 
   app.setShape(cube);
-  app.resetShape();
+  app.resetAll();
 });
 
 // Perspective buttons event handler
@@ -53,6 +53,11 @@ perspectiveBtn.addEventListener("click", () => {
 const resetBtn = document.getElementById("reset") as HTMLElement;
 resetBtn.addEventListener("click", () => {
   app.resetShape();
+});
+
+const resetBtn = document.getElementById("cam-reset") as HTMLElement;
+resetBtn.addEventListener("click", () => {
+  app.resetCamera();
 });
 
 // Start app
