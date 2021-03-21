@@ -21,6 +21,7 @@ prismBtn.addEventListener("click", () => {
   triangularPrism.addPoint(...triangularPrismPoints);
 
   app.setShape(triangularPrism);
+  app.resetShape();
 });
 
 const cubeBtn = document.getElementById("cube") as HTMLElement;
@@ -29,6 +30,7 @@ cubeBtn.addEventListener("click", () => {
   cube.addPoint(...cubePoints);
 
   app.setShape(cube);
+  app.resetShape();
 });
 
 // Perspective buttons event handler
