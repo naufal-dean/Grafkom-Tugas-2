@@ -97,7 +97,6 @@ abstract class Shape {
     );
   }
 
-  // TODO: define correct projection matrix
   public setProjection(projectionType: Projection) {
     switch (projectionType) {
       case "orthographic":
@@ -107,7 +106,7 @@ abstract class Shape {
         this.projMatrix = mat4.obliqueProjMatrix();
         break;
       case "perspective":
-        this.projMatrix = mat4.identity();
+        this.projMatrix = mat4.perspectiveProjMatrix();
         break;
       default:
         throw `Invalid projection type '${projectionType}' on setProjection`;

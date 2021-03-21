@@ -148,8 +148,19 @@ class mat4 {
     );
   }
 
-  static perspectiveProjMatrix = () => {
+  static perspectiveProjMatrix = (fov: number = 90, aspect: number = 1, near: number = 0, far: number = 3) => {
+    // Notes: fov is in degree, it is assumed that the cot of fov is not infinity
 
+    const ctgHalfFov = 1 / Math.tan(toRadian(fov) / 2);
+    const depth = far - near;
+
+    // prettier-ignore
+    return [
+      ctgHalfFov / aspect, 0, 0, 0,
+      0, ctgHalfFov, 0, 0,
+      0, 0, - (near + far) / depth, -1,
+      0, 0, -2 * near * far / depth, 0,
+    ];
   }
 
   static projection = (width: number, height: number, depth: number) => {
