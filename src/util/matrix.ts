@@ -1,9 +1,8 @@
+import {toRadian} from "./convert";
 import {vec} from "./vector";
 
 type Point = [number, number, number];
 type Matrix = number[];
-
-const toRadian = (degree: number) => (degree * Math.PI) / 180;
 
 class mat4 {
   static dimention = 4;
@@ -154,16 +153,24 @@ class mat4 {
    * View matrix (used to control the camera)
    */
 
-  static lookAt = (eye: Point, target: Point, up: Point = [0, 1, 0]) => {
-    const za = vec.normalize(vec.sub(eye, target));
-    const xa = vec.normalize(vec.cross(up, za));
-    const ya = vec.normalize(vec.cross(za, xa));
+  static lookAt = (eye: Point, target: Point = [0, 0, 0], up: Point = [0, 1, 0]) => {
+    // Initial check
+    if (vec.equal(eye, target)) {
+      return mat4.identity();
+    }
 
+    // Calculate camera axes
+    const viewRev = vec.normalize(vec.sub(eye, target));
+    const norm = vec.normalize(vec.cross(viewRev, up));
+    const camUp = vec.normalize(vec.cross(norm, viewRev));
+    const view = vec.mul(-1, viewRev);
+
+    // Return
     return [
-       xa[0], xa[1], xa[2], 0,
-       ya[0], ya[1], ya[2], 0,
-       za[0], za[1], za[2], 0,
-       eye[0], eye[1], eye[2], 1,
+       norm[0], camUp[0], view[0], 0,
+       norm[1], camUp[1], view[1], 0,
+       norm[2], camUp[2], view[2], 0,
+       -vec.dot(norm, eye), -vec.dot(camUp, eye), -vec.dot(view, eye), 1,
     ];
   }
 
@@ -195,4 +202,4 @@ class mat4 {
   }
 }
 
-export {mat4, toRadian};
+export {mat4};
