@@ -23,7 +23,7 @@ class TriangularPrism extends Shape {
 
     const transformMatrix = new Float32Array(this.transformMatrix);
     const worldMatrix = new Float32Array(mat4.identity());
-    const viewMatrix = new Float32Array(mat4.identity());
+    const viewMatrix = new Float32Array(this.viewMatrix);
     const projMatrix = new Float32Array(this.projMatrix);
 
     this.gl.uniformMatrix4fv(transformMatrixPos, false, transformMatrix);
