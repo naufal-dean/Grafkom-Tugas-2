@@ -12,7 +12,7 @@ abstract class Shape {
   protected scale: Point = [1, 1, 1];
   protected zoom: number = 1;
   protected transformMatrix: number[] = mat4.identity();
-  protected projMatrix: number[] = mat4.identity();
+  protected projMatrix: number[] = mat4.orthographicProjMatrix();
 
   constructor(protected canvas: HTMLCanvasElement) {
     canvas.width = 800;
@@ -101,7 +101,7 @@ abstract class Shape {
   public setProjection(projectionType: Projection) {
     switch (projectionType) {
       case "orthographic":
-        this.projMatrix = mat4.identity();
+        this.projMatrix = mat4.orthographicProjMatrix();
         break;
       case "oblique":
         this.projMatrix = mat4.identity();
