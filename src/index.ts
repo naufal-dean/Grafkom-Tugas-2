@@ -8,7 +8,7 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
 // Init default shapes
 const triangularPrism = new TriangularPrism(canvas);
-triangularPrism.addPoint(...triangularPrismPoints);
+triangularPrism.setPoints(...triangularPrismPoints);
 
 // Init app
 const app = new App();
@@ -18,7 +18,7 @@ app.setShape(triangularPrism);
 const prismBtn = document.getElementById("prism") as HTMLElement;
 prismBtn.addEventListener("click", () => {
   const triangularPrism = new TriangularPrism(canvas);
-  triangularPrism.addPoint(...triangularPrismPoints);
+  triangularPrism.setPoints(...triangularPrismPoints);
 
   app.setShape(triangularPrism);
   app.resetAll();
@@ -27,7 +27,7 @@ prismBtn.addEventListener("click", () => {
 const cubeBtn = document.getElementById("cube") as HTMLElement;
 cubeBtn.addEventListener("click", () => {
   const cube = new Cube(canvas);
-  cube.addPoint(...cubePoints);
+  cube.setPoints(...cubePoints);
 
   app.setShape(cube);
   app.resetAll();
@@ -55,8 +55,8 @@ resetBtn.addEventListener("click", () => {
   app.resetShape();
 });
 
-const resetBtn = document.getElementById("cam-reset") as HTMLElement;
-resetBtn.addEventListener("click", () => {
+const camResetBtn = document.getElementById("cam-reset") as HTMLElement;
+camResetBtn.addEventListener("click", () => {
   app.resetCamera();
 });
 

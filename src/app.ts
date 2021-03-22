@@ -36,10 +36,10 @@ class App {
         return;
       }
       this.shape.setTransformation("scale", [val, val, val]);
-    }
-    const changeCameraPositionOf = (cameraSettingType: string, newValue: number) => {
-      this.shape.setCamera(cameraSettingType, newValue);
-    }
+    };
+    const changeCameraPositionOf = (cameraSettingType: CameraSetting, newValue: number) => {
+      this.shape?.setCamera(cameraSettingType, newValue);
+    };
 
     SliderManager.assignInputEvent("rotate-x", (val: number) => {
       changeRotateOf(X, val);
@@ -63,13 +63,13 @@ class App {
       changeZoomOf(val);
     });
     SliderManager.assignInputEvent("cam-radius", (val: number) => {
-      changeCameraPositionOf("radius", parseFloat(val));
+      changeCameraPositionOf("radius", val);
     });
     SliderManager.assignInputEvent("cam-theta", (val: number) => {
-      changeCameraPositionOf("theta", parseFloat(val));
+      changeCameraPositionOf("theta", val);
     });
     SliderManager.assignInputEvent("cam-phi", (val: number) => {
-      changeCameraPositionOf("phi", parseFloat(val));
+      changeCameraPositionOf("phi", val);
     });
   }
 
@@ -102,8 +102,8 @@ class App {
     this.resetCamera();
   }
 
-  setShapeProjection(projectionType: string) {
-    this.shape.setProjection(projectionType);
+  setShapeProjection(projectionType: Projection) {
+    this.shape?.setProjection(projectionType);
   }
 }
 

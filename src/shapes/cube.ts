@@ -2,8 +2,6 @@ import {mat4} from "../util/matrix";
 import Shape from "./shape";
 
 class Cube extends Shape {
-  // override
-
   public draw() {
     const gl = this.gl;
     //prettier-ignore

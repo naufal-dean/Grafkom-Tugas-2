@@ -135,7 +135,7 @@ export const cubePoints = [
 // Type declaration
 // TODO: maybe can be reused
 type Point = [number, number, number];
-type TrianglePoints = {v1: Point, v2: Point, v3: Point};
+type TrianglePoints = {v1: Point; v2: Point; v3: Point};
 
 /*
  * @param radius distance from (x,z)=(0,0) to vertices
@@ -143,7 +143,12 @@ type TrianglePoints = {v1: Point, v2: Point, v3: Point};
  * @param x x coord of the central of the triangle
  * @param z z coord of the central of the triangle
  */
-const generateTrianglePoints = (radius: number, y: number, x: number = 0, z: number = 0) => {
+const generateTrianglePoints = (
+  radius: number,
+  y: number,
+  x: number = 0,
+  z: number = 0,
+): TrianglePoints => {
   const radiusSin30 = radius * 0.5;
   const radiusCos30 = radius * 0.5 * Math.sqrt(3);
 
@@ -153,9 +158,9 @@ const generateTrianglePoints = (radius: number, y: number, x: number = 0, z: num
     // far left
     v2: [x - radiusCos30, y, z - radiusSin30],
     // far right
-    v3: [x + radiusCos30, y, z - radiusSin30]
+    v3: [x + radiusCos30, y, z - radiusSin30],
   };
-}
+};
 
 /*
  * @param p1 the first point
@@ -169,20 +174,24 @@ const buildQuad = (p1: Point, p2: Point, p3: Point, p4: Point, reversed: boolean
   } else {
     return [...p1, ...p2, ...p3, ...p4];
   }
-}
+};
 
 /*
  * @param innerTriangle the inner hollow triangle boundary
  * @param outerTriangle the outer hollow triangle boundary
  * @param reversed is quad reversed
  */
-const buildHollowTriangle = (innerTriangle: TrianglePoints, outerTriangle: TrianglePoints, reversed: boolean = false) => {
+const buildHollowTriangle = (
+  innerTriangle: TrianglePoints,
+  outerTriangle: TrianglePoints,
+  reversed: boolean = false,
+) => {
   return [
     ...buildQuad(outerTriangle.v1, innerTriangle.v1, innerTriangle.v2, outerTriangle.v2, reversed),
     ...buildQuad(outerTriangle.v2, innerTriangle.v2, innerTriangle.v3, outerTriangle.v3, reversed),
     ...buildQuad(outerTriangle.v3, innerTriangle.v3, innerTriangle.v1, outerTriangle.v1, reversed),
   ];
-}
+};
 
 /*
  * @param t1 the first triangle to be connected
@@ -194,10 +203,15 @@ const buildTriangleConnector = (t1: TrianglePoints, t2: TrianglePoints) => {
     ...buildQuad(t1.v2, t2.v2, t2.v3, t1.v3),
     ...buildQuad(t1.v3, t2.v3, t2.v1, t1.v1),
   ];
+};
+
+interface ITrianglePoints {
+  inner: TrianglePoints[];
+  outer: TrianglePoints[];
 }
 
 // 8 triangle points to be used as reference
-const trianglesPoints = {
+const trianglesPoints: ITrianglePoints = {
   inner: [
     generateTrianglePoints(0.4, 0.6),
     generateTrianglePoints(0.4, 0.5),
@@ -209,7 +223,7 @@ const trianglesPoints = {
     generateTrianglePoints(0.6, 0.5),
     generateTrianglePoints(0.6, -0.5),
     generateTrianglePoints(0.6, -0.6),
-  ]
+  ],
 };
 
 // Vertical structure triangle radius
@@ -221,9 +235,15 @@ const vsTriangleRadius = 0.2 / 1.5;
 const vsTriangleRadiusSin30 = vsTriangleRadius * 0.5;
 const vsTriangleRadiusCos30 = vsTriangleRadius * 0.5 * Math.sqrt(3);
 const vsTriangleCenter = [
-  { x: 0, z: 0.6 - vsTriangleRadius },  // near
-  { x: trianglesPoints.outer[0].v2[0] + vsTriangleRadiusCos30, z: trianglesPoints.outer[0].v2[2] + vsTriangleRadiusSin30 },  // far left
-  { x: trianglesPoints.outer[0].v3[0] - vsTriangleRadiusCos30, z: trianglesPoints.outer[0].v3[2] + vsTriangleRadiusSin30 },  // far right
+  {x: 0, z: 0.6 - vsTriangleRadius}, // near
+  {
+    x: trianglesPoints.outer[0].v2[0] + vsTriangleRadiusCos30,
+    z: trianglesPoints.outer[0].v2[2] + vsTriangleRadiusSin30,
+  }, // far left
+  {
+    x: trianglesPoints.outer[0].v3[0] - vsTriangleRadiusCos30,
+    z: trianglesPoints.outer[0].v3[2] + vsTriangleRadiusSin30,
+  }, // far right
 ];
 
 // prettier-ignore
@@ -252,7 +272,6 @@ export const triangularPrismPoints = [
     generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[2].x, vsTriangleCenter[2].z)
   ),
 ];
-
 
 // // front
 // [-0.1, 0.075, 0.1],

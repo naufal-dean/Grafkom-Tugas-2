@@ -1,8 +1,5 @@
 import {toCartesian} from "../util/convert";
 import {mat4} from "../util/matrix";
-type Transformation = "translate" | "rotate" | "scale";
-type Projection = "orthographic" | "oblique" | "perspective";
-type CameraSetting = "radius" | "theta" | "phi";
 
 abstract class Shape {
   // Webgl properties
@@ -11,7 +8,7 @@ abstract class Shape {
 
   // Shape properties
   protected dimention: number = 3;
-  protected points: Point[] = [];
+  protected points: number[] = [];
 
   // Object transformations
   protected translate: Point = [0, 0, 0];
@@ -150,20 +147,17 @@ abstract class Shape {
   }
 
   protected calculateViewMatrix() {
-    this.viewMatrix = mat4.lookAt(toCartesian(this.cameraPosition));
+    this.viewMatrix = mat4.lookAt(toCartesian(this.cameraPosition) as Point);
   }
 
   public render(mode: number, startingIdx: number, size: number) {
+    console.log(size);
     this.gl.drawArrays(mode, startingIdx, size);
   }
 
-  public addPoint(...points: Point[]) {
-    points.forEach((point) => {
-      this.points.push(point);
-    });
+  public setPoints(...points: number[]) {
+    this.points = points;
   }
-
-  protected abstract getPointsFlat(): number[];
 
   public abstract draw(): void;
 

@@ -1,7 +1,26 @@
-type SliderId = "x" | "y" | "z" | "rotate-x" | "rotate-y" | "rotate-z" | "zoom" |
-                "cam-radius" | "cam-theta" | "cam-phi";
-const sliderIds: SliderId[] = ["x", "y", "z", "rotate-x", "rotate-y", "rotate-z", "zoom",
-                "cam-radius", "cam-theta", "cam-phi"];
+type SliderId =
+  | "x"
+  | "y"
+  | "z"
+  | "rotate-x"
+  | "rotate-y"
+  | "rotate-z"
+  | "zoom"
+  | "cam-radius"
+  | "cam-theta"
+  | "cam-phi";
+const sliderIds: SliderId[] = [
+  "x",
+  "y",
+  "z",
+  "rotate-x",
+  "rotate-y",
+  "rotate-z",
+  "zoom",
+  "cam-radius",
+  "cam-theta",
+  "cam-phi",
+];
 
 type Sliders = {
   [sliderId: string]: HTMLInputElement;
@@ -15,13 +34,13 @@ type SliderDefaultValue = {
   [sliderId: string]: number;
 };
 const tSliderDefaultValues: SliderDefaultValue = {
-  "x": 50,
-  "y": 50,
-  "z": 50,
+  x: 50,
+  y: 50,
+  z: 50,
   "rotate-x": 0,
   "rotate-y": 0,
   "rotate-z": 0,
-  "zoom": 1,
+  zoom: 1,
 };
 const cSliderDefaultValues: SliderDefaultValue = {
   "cam-radius": 0,
@@ -52,7 +71,7 @@ class SliderManager {
   static resetTransformSliderValue() {
     sliderIds.forEach((sliderId) => {
       if (tSliderDefaultValues.hasOwnProperty(sliderId)) {
-        sliders[sliderId].value = tSliderDefaultValues[sliderId];
+        sliders[sliderId].value = String(tSliderDefaultValues[sliderId]);
         sliders[sliderId].dispatchEvent(new Event("input"));
       }
     });
@@ -61,7 +80,7 @@ class SliderManager {
   static resetCameraSliderValue() {
     sliderIds.forEach((sliderId) => {
       if (cSliderDefaultValues.hasOwnProperty(sliderId)) {
-        sliders[sliderId].value = cSliderDefaultValues[sliderId];
+        sliders[sliderId].value = String(cSliderDefaultValues[sliderId]);
         sliders[sliderId].dispatchEvent(new Event("input"));
       }
     });
