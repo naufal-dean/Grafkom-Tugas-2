@@ -1,5 +1,5 @@
 import Shape from "./shapes/shape";
-import SliderManager, {sliderIds} from "./SliderManager";
+import SliderManager from "./SliderManager";
 
 const X = 0;
 const Y = 1;

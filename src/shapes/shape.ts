@@ -35,6 +35,8 @@ abstract class Shape {
 
     this.calculateTransformMatrix();
     this.calculateViewMatrix();
+    this.calculateWorldMatrix();
+    this.calculateProjectionMatrix();
   }
 
   protected initMainShader(program: WebGLProgram) {
@@ -101,6 +103,12 @@ abstract class Shape {
     }
   }
 
+  protected calculateWorldMatrix() {
+    const worldMatrixPos = this.gl.getUniformLocation(this.program, "mWorld");
+    const worldMatrix = new Float32Array(mat4.identity());
+    this.gl.uniformMatrix4fv(worldMatrixPos, false, worldMatrix);
+  }
+
   protected calculateTransformMatrix() {
     this.transformMatrix = mat4.mMult(
       mat4.xRotation(this.rotate[0]),
@@ -109,6 +117,13 @@ abstract class Shape {
       mat4.scale(...this.scale),
       mat4.translation(...this.translate),
     );
+    const gl = this.gl;
+
+    const transformMatrixPos = gl.getUniformLocation(this.program, "mTransform");
+
+    const transformMatrix = new Float32Array(this.transformMatrix);
+
+    this.gl.uniformMatrix4fv(transformMatrixPos, false, transformMatrix);
   }
 
   public setProjection(projectionType: Projection) {
@@ -125,6 +140,13 @@ abstract class Shape {
       default:
         throw `shape.setProjection: invalid projection type '${projectionType}'`;
     }
+    this.calculateProjectionMatrix();
+  }
+
+  protected calculateProjectionMatrix() {
+    const projMatrixPos = this.gl.getUniformLocation(this.program, "mProj");
+    const projMatrix = new Float32Array(this.projMatrix);
+    this.gl.uniformMatrix4fv(projMatrixPos, false, projMatrix);
   }
 
   public setCamera(cameraSettingType: CameraSetting, newValue: number) {
@@ -148,10 +170,12 @@ abstract class Shape {
 
   protected calculateViewMatrix() {
     this.viewMatrix = mat4.lookAt(toCartesian(this.cameraPosition) as Point);
+    const viewMatrixPos = this.gl.getUniformLocation(this.program, "mView");
+    const viewMatrix = new Float32Array(this.viewMatrix);
+    this.gl.uniformMatrix4fv(viewMatrixPos, false, viewMatrix);
   }
 
   public render(mode: number, startingIdx: number, size: number) {
-    console.log(size);
     this.gl.drawArrays(mode, startingIdx, size);
   }
 
@@ -159,11 +183,13 @@ abstract class Shape {
     this.points = points;
   }
 
+  public abstract setupPoints(): void;
+
   public abstract draw(): void;
 
-  setColor(colors: Color[]) {
+  setColor(colors: Color) {
     const gl = this.gl;
-    const real_color = this.mapColor(colors.flat());
+    const real_color = this.mapColor(colors);
     const colorBuffer = gl.createBuffer();
     if (!colorBuffer) throw "shape.setColor: no color buffer error";
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);

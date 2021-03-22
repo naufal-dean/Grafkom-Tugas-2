@@ -1,34 +1,82 @@
-import {mat4} from "../util/matrix";
+import {createSquare2D} from "./initialPoints/util";
 import Shape from "./shape";
 
 class Cube extends Shape {
-  public draw() {
-    const gl = this.gl;
-    //prettier-ignore
+  constructor(canvas: HTMLCanvasElement, private size: number, private thickness: number) {
+    super(canvas);
+    this.setupPoints();
+  }
 
+  public setSize(size: number) {
+    this.size = size;
+    this.setupPoints();
+  }
+
+  setupPoints() {
+    const halfSize = this.size / 2;
+    const halfThicc = this.thickness / 2;
+    // half size min half thickness
+    const sizemt = halfSize - halfThicc;
+
+    this.points = [
+      // front - back
+      ...createSquare2D(
+        [-sizemt, sizemt, halfSize],
+        [sizemt, sizemt, halfSize],
+        [sizemt, -sizemt, halfSize],
+        [-sizemt, -sizemt, halfSize],
+        halfThicc,
+        "front",
+      ),
+      ...createSquare2D(
+        [-sizemt, sizemt, -halfSize],
+        [sizemt, sizemt, -halfSize],
+        [sizemt, -sizemt, -halfSize],
+        [-sizemt, -sizemt, -halfSize],
+        halfThicc,
+        "front",
+      ),
+      // sides
+      ...createSquare2D(
+        [-halfSize, sizemt, sizemt],
+        [-halfSize, sizemt, -sizemt],
+        [-halfSize, -sizemt, -sizemt],
+        [-halfSize, -sizemt, sizemt],
+        halfThicc,
+        "side",
+      ),
+      ...createSquare2D(
+        [halfSize, sizemt, sizemt],
+        [halfSize, sizemt, -sizemt],
+        [halfSize, -sizemt, -sizemt],
+        [halfSize, -sizemt, sizemt],
+        halfThicc,
+        "side",
+      ),
+      // bottom - top
+      ...createSquare2D(
+        [-sizemt, halfSize, -sizemt],
+        [sizemt, halfSize, -sizemt],
+        [sizemt, halfSize, sizemt],
+        [-sizemt, halfSize, sizemt],
+        halfThicc,
+        "ground",
+      ),
+      ...createSquare2D(
+        [-sizemt, -halfSize, -sizemt],
+        [sizemt, -halfSize, -sizemt],
+        [sizemt, -halfSize, sizemt],
+        [-sizemt, -halfSize, sizemt],
+        halfThicc,
+        "ground",
+      ),
+    ];
+  }
+  public draw() {
     const vertexData = this.points;
 
     this.changePosition(vertexData);
-    this.setColor([
-      [255, 0, 0],
-      [0, 215, 0],
-      [0, 0, 0],
-    ]);
-
-    const transformMatrixPos = gl.getUniformLocation(this.program, "mTransform");
-    const worldMatrixPos = gl.getUniformLocation(this.program, "mWorld");
-    const viewMatrixPos = gl.getUniformLocation(this.program, "mView");
-    const projMatrixPos = gl.getUniformLocation(this.program, "mProj");
-
-    const transformMatrix = new Float32Array(this.transformMatrix);
-    const worldMatrix = new Float32Array(mat4.identity());
-    const viewMatrix = new Float32Array(this.viewMatrix);
-    const projMatrix = new Float32Array(this.projMatrix);
-
-    this.gl.uniformMatrix4fv(transformMatrixPos, false, transformMatrix);
-    this.gl.uniformMatrix4fv(worldMatrixPos, false, worldMatrix);
-    this.gl.uniformMatrix4fv(viewMatrixPos, false, viewMatrix);
-    this.gl.uniformMatrix4fv(projMatrixPos, false, projMatrix);
+    this.setColor([0, 0, 0]);
 
     // loop to draw cube side(rusuk), each as a rectangle.
     // To draw a rectangle needs 4 points, and each cube' face(sisi) has 4 side,
