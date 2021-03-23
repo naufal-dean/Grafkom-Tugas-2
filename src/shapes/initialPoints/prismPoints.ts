@@ -76,11 +76,11 @@ const buildHollowTriangle = (
  * @param t1 the first triangle to be connected
  * @param t2 the second triangle to be connected
  */
-const buildTriangleConnector = (t1: TrianglePoints, t2: TrianglePoints, normalArray: Point[]) => {
+const buildTriangleConnector = (t1: TrianglePoints, t2: TrianglePoints, normalArray: Point[], reversed: boolean = false) => {
   return [
-    ...buildQuad(t1.v1, t2.v1, t2.v2, t1.v2, normalArray),
-    ...buildQuad(t1.v2, t2.v2, t2.v3, t1.v3, normalArray),
-    ...buildQuad(t1.v3, t2.v3, t2.v1, t1.v1, normalArray),
+    ...buildQuad(t1.v1, t2.v1, t2.v3, t1.v3, normalArray, reversed),
+    ...buildQuad(t1.v3, t2.v3, t2.v2, t1.v2, normalArray, reversed),
+    ...buildQuad(t1.v2, t2.v2, t2.v1, t1.v1, normalArray, reversed),
   ];
 };
 
@@ -130,13 +130,13 @@ let triangularPrismNormals = [];
 const triangularPrismPoints = [
   // Top triangle structure
   ...buildHollowTriangle(trianglesPoints.inner[0], trianglesPoints.outer[0], triangularPrismNormals),
-  ...buildHollowTriangle(trianglesPoints.inner[1], trianglesPoints.outer[1], triangularPrismNormals),
-  ...buildTriangleConnector(trianglesPoints.inner[0], trianglesPoints.inner[1], triangularPrismNormals),
+  ...buildHollowTriangle(trianglesPoints.inner[1], trianglesPoints.outer[1], triangularPrismNormals, true),
+  ...buildTriangleConnector(trianglesPoints.inner[0], trianglesPoints.inner[1], triangularPrismNormals, true),
   ...buildTriangleConnector(trianglesPoints.outer[0], trianglesPoints.outer[1], triangularPrismNormals),
   // Bottom triangle structure
   ...buildHollowTriangle(trianglesPoints.inner[2], trianglesPoints.outer[2], triangularPrismNormals),
-  ...buildHollowTriangle(trianglesPoints.inner[3], trianglesPoints.outer[3], triangularPrismNormals),
-  ...buildTriangleConnector(trianglesPoints.inner[2], trianglesPoints.inner[3], triangularPrismNormals),
+  ...buildHollowTriangle(trianglesPoints.inner[3], trianglesPoints.outer[3], triangularPrismNormals, true),
+  ...buildTriangleConnector(trianglesPoints.inner[2], trianglesPoints.inner[3], triangularPrismNormals, true),
   ...buildTriangleConnector(trianglesPoints.outer[2], trianglesPoints.outer[3], triangularPrismNormals),
   // Vertical structure
   ...buildTriangleConnector(
