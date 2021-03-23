@@ -8,28 +8,28 @@ import Shape from "./shapes/shape";
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
 // function for debugging block / cube as well
-function initDefaultShape(shapeName: ShapeType): Shape {
-  let defaultObj: Shape;
+function initShape(shapeName: ShapeType): Shape {
+  let obj: Shape;
   switch (shapeName) {
     case "block":
-      defaultObj = new Block(canvas, 0.4, 0.2, 0.2, 0.025);
+      obj = new Block(canvas, 0.4, 0.2, 0.2, 0.025);
       break;
     case "cube":
-      defaultObj = new Cube(canvas, 0.2, 0.025);
+      obj = new Cube(canvas, 0.2, 0.025);
       break;
     case "prism":
-      defaultObj = new TriangularPrism(canvas);
+      obj = new TriangularPrism(canvas);
 
-      defaultObj.setPoints(...triangularPrism.points);
-      defaultObj.setNormals(...triangularPrism.normals);
+      obj.setPoints(...triangularPrism.points);
+      obj.setNormals(...triangularPrism.normals);
       break;
   }
-  return defaultObj;
+  return obj;
 }
 
 // Init default shapes
 // change this to prism later
-const defaultObj = initDefaultShape("prism");
+const defaultObj = initShape("prism");
 
 // Init app
 const app = new App();
@@ -38,28 +38,20 @@ app.setShape(defaultObj);
 // Pick hollow object buttons event handler
 const prismBtn = document.getElementById("prism") as HTMLElement;
 prismBtn.addEventListener("click", () => {
-  const triangularPrism = new TriangularPrism(canvas);
-  triangularPrism.setPoints(...triangularPrism.points);
-  triangularPrism.setNormals(...triangularPrism.normals);
-
-  app.setShape(triangularPrism);
   app.resetAll();
+  app.setShape(initShape("prism"))
 });
 
 const cubeBtn = document.getElementById("cube") as HTMLElement;
 cubeBtn.addEventListener("click", () => {
-  const cube = new Cube(canvas, 0.2, 0.025);
-
-  app.setShape(cube);
   app.resetAll();
+  app.setShape(initShape("cube"));
 });
 
 const blockBtn = document.getElementById("block") as HTMLElement;
 blockBtn.addEventListener("click", () => {
-  const block = new Block(canvas, 0.8, 0.4, 0.2, 0.025);
-
-  app.setShape(block);
   app.resetAll();
+  app.setShape(initShape("block"));
 });
 
 // Perspective buttons event handler
