@@ -89,7 +89,7 @@ abstract class Shape {
         if (useShading == 1) {
           // Build blinn phong model
           vec3 vertPos = (mView * mWorld * mTransform * vec4(position, 1)).xyz;
-          vec3 L = normalize(lightPosition - vertPos);
+          vec3 L = normalize((mView * vec4(lightPosition, 1)).xyz - vertPos);
           vec3 V = normalize(-vertPos);
           vec3 H = normalize(L + V);
           vec3 N = normalize((mView * mWorld * mTransform * vec4(vertNormal, 0)).xyz);
