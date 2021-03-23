@@ -12,14 +12,14 @@ abstract class Shape {
   protected normals: number[] = [];
 
   // Phong properties (light and material properties, light position)
-  protected Id: number[] = [1.0, 1.0, 1.0];
+  protected Id: number[] = [0.1953125, 0.50390625, 0.65625];
   protected Is: number[] = [1.0, 1.0, 1.0];
-  protected Ia: number[] = [0.25, 0.25, 0.25];
-  protected Kd: number[] = [0.0, 1.0, 0.0];
-  protected Ks: number[] = [0.0, 1.0, 0.0];
-  protected Ka: number[] = [1.0, 0.0, 0.0];
+  protected Ia: number[] = [0.1953125, 0.50390625, 0.65625];
+  protected Kd: number[] = [1.0, 1.0, 1.0];
+  protected Ks: number[] = [1.0, 1.0, 1.0];
+  protected Ka: number[] = [0.25, 0.25, 0.25];
   protected lightPosition: number[] = [1.0, 1.0, 1.0];
-  protected shininess: number = 50;
+  protected shininess: number = 100;
 
   // Object transformations
   protected translate: Point = [0, 0, 0];
