@@ -1,3 +1,5 @@
+import {vec} from "../../util/vector";
+
 /*
  * Triangular Prism
  */
@@ -37,7 +39,14 @@ const generateTrianglePoints = (
  * @param p3 the third point
  * @param p4 the fourth point
  */
-const buildQuad = (p1: Point, p2: Point, p3: Point, p4: Point, reversed: boolean = false) => {
+const buildQuad = (p1: Point, p2: Point, p3: Point, p4: Point, normalArray: Point[], reversed: boolean = false) => {
+  const temp1 = vec.sub(p2, p1);
+  const temp2 = vec.sub(p4, p1);
+  const normalDir = reversed ? -1 : 1;
+  const normal = vec.mul(normalDir, vec.cross(temp1, temp2));
+
+  normalArray.push(...normal, ...normal, ...normal, ...normal);
+
   if (reversed) {
     return [...p4, ...p3, ...p2, ...p1];
   } else {
@@ -53,12 +62,13 @@ const buildQuad = (p1: Point, p2: Point, p3: Point, p4: Point, reversed: boolean
 const buildHollowTriangle = (
   innerTriangle: TrianglePoints,
   outerTriangle: TrianglePoints,
+  normalArray: Point[],
   reversed: boolean = false,
 ) => {
   return [
-    ...buildQuad(outerTriangle.v1, innerTriangle.v1, innerTriangle.v2, outerTriangle.v2, reversed),
-    ...buildQuad(outerTriangle.v2, innerTriangle.v2, innerTriangle.v3, outerTriangle.v3, reversed),
-    ...buildQuad(outerTriangle.v3, innerTriangle.v3, innerTriangle.v1, outerTriangle.v1, reversed),
+    ...buildQuad(outerTriangle.v1, innerTriangle.v1, innerTriangle.v2, outerTriangle.v2, normalArray, reversed),
+    ...buildQuad(outerTriangle.v2, innerTriangle.v2, innerTriangle.v3, outerTriangle.v3, normalArray, reversed),
+    ...buildQuad(outerTriangle.v3, innerTriangle.v3, innerTriangle.v1, outerTriangle.v1, normalArray, reversed),
   ];
 };
 
@@ -66,11 +76,11 @@ const buildHollowTriangle = (
  * @param t1 the first triangle to be connected
  * @param t2 the second triangle to be connected
  */
-const buildTriangleConnector = (t1: TrianglePoints, t2: TrianglePoints) => {
+const buildTriangleConnector = (t1: TrianglePoints, t2: TrianglePoints, normalArray: Point[]) => {
   return [
-    ...buildQuad(t1.v1, t2.v1, t2.v2, t1.v2),
-    ...buildQuad(t1.v2, t2.v2, t2.v3, t1.v3),
-    ...buildQuad(t1.v3, t2.v3, t2.v1, t1.v1),
+    ...buildQuad(t1.v1, t2.v1, t2.v2, t1.v2, normalArray),
+    ...buildQuad(t1.v2, t2.v2, t2.v3, t1.v3, normalArray),
+    ...buildQuad(t1.v3, t2.v3, t2.v1, t1.v1, normalArray),
   ];
 };
 
@@ -115,29 +125,38 @@ const vsTriangleCenter = [
   }, // far right
 ];
 
+let triangularPrismNormals = [];
 // prettier-ignore
-export default [
+const triangularPrismPoints = [
   // Top triangle structure
-  ...buildHollowTriangle(trianglesPoints.inner[0], trianglesPoints.outer[0]),
-  ...buildHollowTriangle(trianglesPoints.inner[1], trianglesPoints.outer[1]),
-  ...buildTriangleConnector(trianglesPoints.inner[0], trianglesPoints.inner[1]),
-  ...buildTriangleConnector(trianglesPoints.outer[0], trianglesPoints.outer[1]),
+  ...buildHollowTriangle(trianglesPoints.inner[0], trianglesPoints.outer[0], triangularPrismNormals),
+  ...buildHollowTriangle(trianglesPoints.inner[1], trianglesPoints.outer[1], triangularPrismNormals),
+  ...buildTriangleConnector(trianglesPoints.inner[0], trianglesPoints.inner[1], triangularPrismNormals),
+  ...buildTriangleConnector(trianglesPoints.outer[0], trianglesPoints.outer[1], triangularPrismNormals),
   // Bottom triangle structure
-  ...buildHollowTriangle(trianglesPoints.inner[2], trianglesPoints.outer[2]),
-  ...buildHollowTriangle(trianglesPoints.inner[3], trianglesPoints.outer[3]),
-  ...buildTriangleConnector(trianglesPoints.inner[2], trianglesPoints.inner[3]),
-  ...buildTriangleConnector(trianglesPoints.outer[2], trianglesPoints.outer[3]),
+  ...buildHollowTriangle(trianglesPoints.inner[2], trianglesPoints.outer[2], triangularPrismNormals),
+  ...buildHollowTriangle(trianglesPoints.inner[3], trianglesPoints.outer[3], triangularPrismNormals),
+  ...buildTriangleConnector(trianglesPoints.inner[2], trianglesPoints.inner[3], triangularPrismNormals),
+  ...buildTriangleConnector(trianglesPoints.outer[2], trianglesPoints.outer[3], triangularPrismNormals),
   // Vertical structure
   ...buildTriangleConnector(
     generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[0].x, vsTriangleCenter[0].z),
-    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[0].x, vsTriangleCenter[0].z)
+    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[0].x, vsTriangleCenter[0].z),
+    triangularPrismNormals
   ),
   ...buildTriangleConnector(
     generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[1].x, vsTriangleCenter[1].z),
-    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[1].x, vsTriangleCenter[1].z)
+    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[1].x, vsTriangleCenter[1].z),
+    triangularPrismNormals
   ),
   ...buildTriangleConnector(
     generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[2].x, vsTriangleCenter[2].z),
-    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[2].x, vsTriangleCenter[2].z)
+    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[2].x, vsTriangleCenter[2].z),
+    triangularPrismNormals
   ),
 ];
+
+export default {
+  points: triangularPrismPoints,
+  normals: triangularPrismNormals
+};

@@ -1,7 +1,7 @@
 import App from "./app";
 import Cube from "./shapes/cube";
 import Block from "./shapes/block";
-import {triangularPrismPoints} from "./shapes/initialPoints";
+import {triangularPrism} from "./shapes/initialPoints";
 import TriangularPrism from "./shapes/triangularPrism";
 import Shape from "./shapes/shape";
 
@@ -19,7 +19,10 @@ function initDefaultShape(shapeName: ShapeType): Shape {
       break;
     case "prism":
       defaultObj = new TriangularPrism(canvas);
-      defaultObj.setPoints(...triangularPrismPoints);
+      console.log(triangularPrism);
+
+      defaultObj.setPoints(...triangularPrism.points);
+      defaultObj.setNormals(...triangularPrism.normals);
       break;
   }
   return defaultObj;
@@ -37,7 +40,8 @@ app.setShape(defaultObj);
 const prismBtn = document.getElementById("prism") as HTMLElement;
 prismBtn.addEventListener("click", () => {
   const triangularPrism = new TriangularPrism(canvas);
-  triangularPrism.setPoints(...triangularPrismPoints);
+  triangularPrism.setPoints(...triangularPrism.points);
+  triangularPrism.setNormals(...triangularPrism.normals);
 
   app.setShape(triangularPrism);
   app.resetAll();
@@ -54,6 +58,7 @@ cubeBtn.addEventListener("click", () => {
 const blockBtn = document.getElementById("block") as HTMLElement;
 blockBtn.addEventListener("click", () => {
   const block = new Block(canvas, 0.8, 0.4, 0.2, 0.025);
+
   app.setShape(block);
   app.resetAll();
 });

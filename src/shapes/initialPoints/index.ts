@@ -1,5 +1,5 @@
-import triangularPrismPoints from "./prismPoints";
+import triangularPrism from "./prismPoints";
 // prettier-ignore
 export {
-  triangularPrismPoints,
+  triangularPrism,
 }
