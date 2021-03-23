@@ -90,7 +90,7 @@ class mat4 {
    */
 
   static orthographicProj = (left: number = -1, right: number = 1,
-      bottom: number = -1, top: number = 1, near: number = -1, far: number = 1) => {
+      bottom: number = -1, top: number = 1, near: number = -15, far: number = 15) => {
 
     // Initial check
     if (left == right || bottom == top || near == far) {
@@ -112,8 +112,8 @@ class mat4 {
     ];
   }
 
-  static obliqueProj = (theta: number = 70, phi: number = 70, left: number = -1, right: number = 1,
-      bottom: number = -1, top: number = 1, near: number = -1, far: number = 1) => {
+  static obliqueProj = (theta: number = 10, phi: number = 10, left: number = -1, right: number = 1,
+      bottom: number = -1, top: number = 1, near: number = -15, far: number = 15) => {
     // Notes: theta and phi is in degree, it is assumed that the cot of theta and phi is not infinity
 
     // Convert theta and phi to radian
@@ -133,7 +133,7 @@ class mat4 {
     );
   }
 
-  static perspectiveProj = (fov: number = 90, aspect: number = 1, near: number = 0.01, far: number = 10) => {
+  static perspectiveProj = (fov: number = 90, aspect: number = 1, near: number = 0.01, far: number = 20) => {
     // Notes: fov is in degree, it is assumed that the cot of fov is not infinity
 
     const ctgHalfFov = 1 / Math.tan(toRadian(fov) / 2);
@@ -159,19 +159,60 @@ class mat4 {
       return mat4.identity();
     }
 
-    // Calculate camera axes
-    const viewRev = vec.normalize(vec.sub(eye, target));
-    const norm = vec.normalize(vec.cross(viewRev, up));
-    const camUp = vec.normalize(vec.cross(norm, viewRev));
-    const view = vec.mul(-1, viewRev);
+    var camView = vec.normalize(vec.sub(eye, target));
+    var camNorm = vec.normalize(vec.cross(up, camView));
+    var camUp = vec.normalize(vec.cross(camView, camNorm));
 
-    // Return
-    return [
-       norm[0], camUp[0], view[0], 0,
-       norm[1], camUp[1], view[1], 0,
-       norm[2], camUp[2], view[2], 0,
-       -vec.dot(norm, eye), -vec.dot(camUp, eye), -vec.dot(view, eye), 1,
-    ];
+    return mat4.inverse([
+       camNorm[0], camNorm[1], camNorm[2], 0,
+       camUp[0], camUp[1], camUp[2], 0,
+       camView[0], camView[1], camView[2], 0,
+       eye[0], eye[1], eye[2], 1,
+    ]);
+  }
+
+  private static submatrix3x3Det = (m: Matrix, ir: number, jr: number): number => {
+    // Get determinant of 3x3 submatrix of matrix 4x4 (removing row ir and col jr)
+    let sm = [];
+    let counter = 0;
+    for (let i = 0; i < 4; i++) {
+      if (i == ir) {
+        counter += 4;
+        continue;
+      }
+
+      let row = [];
+      for (let j = 0; j < 4; j++) {
+        if (j == jr) {
+          counter++;
+          continue;
+        }
+
+        row.push(m[counter]);
+        counter++;
+      }
+      sm.push(row);
+    }
+
+    return ((sm[0][0] * sm[1][1] * sm[2][2]) + (sm[0][1] * sm[1][2] * sm[2][0]) + (sm[0][2] * sm[1][0] * sm[2][1])
+      - (sm[0][2] * sm[1][1] * sm[2][0]) - (sm[0][1] * sm[1][0] * sm[2][2]) - (sm[0][0] * sm[1][2] * sm[2][1]));
+  }
+
+  static inverse = (m: Matrix): Matrix => {
+    let adjM = Array(16);
+    let det = 0;
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        const koef = (i + j) % 2 == 0 ? 1 : -1;
+        const elem = koef * mat4.submatrix3x3Det(m, i, j);
+        if (j == 0) {
+          det += m[i * 4 + j] * elem;
+        }
+        adjM[j * 4 + i] = elem;
+      }
+    }
+
+    return adjM.map(el => el / det);
   }
 
 
