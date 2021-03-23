@@ -13,7 +13,7 @@ abstract class Shape {
 
   // Phong properties (light and material properties, light position)
   protected Id: number[] = [0.1953125, 0.50390625, 0.65625];
-  protected Is: number[] = [1.0, 1.0, 1.0];
+  protected Is: number[] = [0.6171875, 0.87109375, 0.99609375];
   protected Ia: number[] = [0.1953125, 0.50390625, 0.65625];
   protected Kd: number[] = [1.0, 1.0, 1.0];
   protected Ks: number[] = [1.0, 1.0, 1.0];
