@@ -19,7 +19,6 @@ function initDefaultShape(shapeName: ShapeType): Shape {
       break;
     case "prism":
       defaultObj = new TriangularPrism(canvas);
-      console.log(triangularPrism);
 
       defaultObj.setPoints(...triangularPrism.points);
       defaultObj.setNormals(...triangularPrism.normals);

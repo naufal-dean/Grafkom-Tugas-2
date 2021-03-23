@@ -76,7 +76,6 @@ class Cube extends Shape {
     const vertexData = this.points;
 
     this.changePosition(vertexData);
-    this.setColor([0, 0, 0]);
 
     // loop to draw cube side(rusuk), each as a rectangle.
     // To draw a rectangle needs 4 points, and each cube' face(sisi) has 4 side,

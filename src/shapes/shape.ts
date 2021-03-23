@@ -12,9 +12,9 @@ abstract class Shape {
   protected normals: number[] = [];
 
   // Phong properties (light and material properties, light position)
-  protected Id: number[] = [0.1953125, 0.50390625, 0.65625];
-  protected Is: number[] = [0.6171875, 0.87109375, 0.99609375];
-  protected Ia: number[] = [0.1953125, 0.50390625, 0.65625];
+  protected Id: Color = [0.1953125, 0.50390625, 0.65625];
+  protected Is: Color = [0.6171875, 0.87109375, 0.99609375];
+  protected Ia: Color = [0.1953125, 0.50390625, 0.65625];
   protected Kd: number[] = [1.0, 1.0, 1.0];
   protected Ks: number[] = [1.0, 1.0, 1.0];
   protected Ka: number[] = [0.25, 0.25, 0.25];
@@ -51,6 +51,7 @@ abstract class Shape {
     this.calculateProjectionMatrix();
 
     this.setPhongProperties();
+    this.setUseShading(true);
   }
 
   protected initMainShader(program: WebGLProgram) {
@@ -61,10 +62,9 @@ abstract class Shape {
       attribute vec3 position;
       attribute vec3 vertNormal;
 
-      // attribute vec3 vertColor;
       varying vec3 fragColor;
-
       uniform vec3 lightPosition;
+      uniform int useShading;
 
       // Light properties
       uniform vec3 Id;
@@ -86,19 +86,22 @@ abstract class Shape {
       void main() {
         gl_Position = mProj * mView * mWorld * mTransform * vec4(position, 1);
 
-        // Build blinn phong model
-        vec3 vertPos = (mView * mWorld * mTransform * vec4(position, 1)).xyz;
-        vec3 L = normalize(lightPosition - vertPos);
-        vec3 V = normalize(-vertPos);
-        vec3 H = normalize(L + V);
-        vec3 N = normalize((mView * mWorld * mTransform * vec4(vertNormal, 0)).xyz);
+        if (useShading == 1) {
+          // Build blinn phong model
+          vec3 vertPos = (mView * mWorld * mTransform * vec4(position, 1)).xyz;
+          vec3 L = normalize(lightPosition - vertPos);
+          vec3 V = normalize(-vertPos);
+          vec3 H = normalize(L + V);
+          vec3 N = normalize((mView * mWorld * mTransform * vec4(vertNormal, 0)).xyz);
 
-        vec3 diffuse = Kd * Id * max(dot(L, N), 0.0);
-        vec3 specular = Ks * Is * pow(max(dot(N, H), 0.0), shininess);
-        vec3 ambient = Ka * Ia;
+          vec3 diffuse = Kd * Id * max(dot(L, N), 0.0);
+          vec3 specular = Ks * Is * pow(max(dot(N, H), 0.0), shininess);
+          vec3 ambient = Ka * Ia;
 
-        // fragColor = vertColor;
-        fragColor = diffuse + specular + ambient;
+          fragColor = diffuse + specular + ambient;
+        } else {
+          fragColor = vec3(0, 0, 0);
+        }
       }
       `,
     );
@@ -235,21 +238,6 @@ abstract class Shape {
 
   public abstract draw(): void;
 
-  setColor(colors: Color) {
-    // const gl = this.gl;
-    // const real_color = this.mapColor(colors);
-    // const colorBuffer = gl.createBuffer();
-    // if (!colorBuffer) throw "shape.setColor: no color buffer error";
-    // gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(real_color), gl.STATIC_DRAW);
-    //
-    // const colorPointer = gl.getAttribLocation(this.program, "vertColor");
-    // gl.enableVertexAttribArray(colorPointer);
-    // gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    // gl.vertexAttribPointer(colorPointer, 3, gl.FLOAT, false, 0, 0);
-    // return colorBuffer;
-  }
-
   mapColor(color: number[]) {
     return color.map((elmt) => (elmt % 256) / 255);
   }
@@ -298,6 +286,13 @@ abstract class Shape {
     gl.uniform3fv(gl.getUniformLocation(program, "lightPosition"), new Float32Array(this.lightPosition));
 
     gl.uniform1f(gl.getUniformLocation(program, "shininess"), this.shininess);
+  }
+
+  setUseShading(useShading: boolean) {
+    const {gl, program} = this;
+
+    this.useShading = useShading ? 1 : 0;
+    gl.uniform1i(gl.getUniformLocation(program, "useShading"), this.useShading);
   }
 
   createCompiledShader(type: number, sourceCode: string) {
