@@ -133,7 +133,7 @@ class mat4 {
     );
   }
 
-  static perspectiveProj = (fov: number = 90, aspect: number = 1, near: number = 0, far: number = 3) => {
+  static perspectiveProj = (fov: number = 90, aspect: number = 1, near: number = 0.01, far: number = 10) => {
     // Notes: fov is in degree, it is assumed that the cot of fov is not infinity
 
     const ctgHalfFov = 1 / Math.tan(toRadian(fov) / 2);
