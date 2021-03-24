@@ -1,5 +1,9 @@
-import triangularPrism from "./prismPoints";
+import buildTriangularPrismDatas from "./prismPoints";
+import buildCubeDatas from "./cubePoints";
+import buildBlockDatas from "./blockPoints";
 // prettier-ignore
 export {
-  triangularPrism,
+  buildTriangularPrismDatas,
+  buildCubeDatas,
+  buildBlockDatas
 }

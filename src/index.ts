@@ -19,9 +19,6 @@ function initShape(shapeName: ShapeType): Shape {
       break;
     case "prism":
       obj = new TriangularPrism(canvas);
-
-      obj.setPoints(...triangularPrism.points);
-      obj.setNormals(...triangularPrism.normals);
       break;
   }
   obj.setUseShading(document.getElementById("shading").checked);
