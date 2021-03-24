@@ -63,6 +63,7 @@ function createSquare2D(
       p3[x] - w, p3[y], p3[z] - w,
     ]
   } else {
+    // sides
     // prettier-ignore
     return [
       // first block ( top-left to top-right )
