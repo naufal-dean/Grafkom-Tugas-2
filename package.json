@@ -1,9 +1,9 @@
 {
-  "name": "kuliah-grafkom-tubes-1",
+  "name": "kuliah-grafkom-tubes-2",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/nafkhanzam/Kuliah-Grafkom-Tubes-1.git",
-  "author": "nafkhanzam <nafkhanalzamzami@gmail.com>",
+  "repository": "https://gitlab.informatika.org/naufal-dean/grafkom-tugas-2",
+  "author": "13518123@std.stei.itb.ac.id",
   "license": "MIT",
   "scripts": {
     "start": "parcel index.html",

@@ -105,6 +105,10 @@ class App {
   setShapeProjection(projectionType: Projection) {
     this.shape?.setProjection(projectionType);
   }
+
+  toogleShading() {
+    this.shape?.toggleShading();
+  }
 }
 
 export default App;

@@ -81,5 +81,9 @@ camResetBtn.addEventListener("click", () => {
   app.resetCamera();
 });
 
+const shadingBtn = document.getElementById("shading-btn") as HTMLCanvasElement;
+shadingBtn.addEventListener("click", () => {
+  app.toogleShading();
+});
 // Start app
 app.start();
