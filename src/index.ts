@@ -12,10 +12,10 @@ function initShape(shapeName: ShapeType): Shape {
   let obj: Shape;
   switch (shapeName) {
     case "block":
-      obj = new Block(canvas, 0.4, 0.2, 0.2, 0.025);
+      obj = new Block(canvas, 0.8, 0.4, 0.4, 0.1);
       break;
     case "cube":
-      obj = new Cube(canvas, 0.2, 0.025);
+      obj = new Cube(canvas, 0.6, 0.1);
       break;
     case "prism":
       obj = new TriangularPrism(canvas);
@@ -39,7 +39,7 @@ app.setShape(defaultObj);
 const prismBtn = document.getElementById("prism") as HTMLElement;
 prismBtn.addEventListener("click", () => {
   app.resetAll();
-  app.setShape(initShape("prism"))
+  app.setShape(initShape("prism"));
 });
 
 const cubeBtn = document.getElementById("cube") as HTMLElement;
