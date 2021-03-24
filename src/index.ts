@@ -1,7 +1,6 @@
 import App from "./app";
 import Cube from "./shapes/cube";
 import Block from "./shapes/block";
-import {triangularPrism} from "./shapes/initialPoints";
 import TriangularPrism from "./shapes/triangularPrism";
 import Shape from "./shapes/shape";
 
