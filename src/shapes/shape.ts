@@ -35,6 +35,8 @@ abstract class Shape {
   protected viewMatrix: number[] = mat4.identity();
   protected projMatrix: number[] = mat4.orthographicProj();
 
+  private useShading: 0 | 1 = 1;
+
   constructor(protected canvas: HTMLCanvasElement) {
     canvas.width = 800;
     canvas.height = 800;
@@ -283,7 +285,10 @@ abstract class Shape {
     gl.uniform3fv(gl.getUniformLocation(program, "Ks"), new Float32Array(this.Ks));
     gl.uniform3fv(gl.getUniformLocation(program, "Ka"), new Float32Array(this.Ka));
 
-    gl.uniform3fv(gl.getUniformLocation(program, "lightPosition"), new Float32Array(this.lightPosition));
+    gl.uniform3fv(
+      gl.getUniformLocation(program, "lightPosition"),
+      new Float32Array(this.lightPosition),
+    );
 
     gl.uniform1f(gl.getUniformLocation(program, "shininess"), this.shininess);
   }

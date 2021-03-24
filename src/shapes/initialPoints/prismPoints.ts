@@ -39,7 +39,14 @@ const generateTrianglePoints = (
  * @param p3 the third point
  * @param p4 the fourth point
  */
-const buildQuad = (p1: Point, p2: Point, p3: Point, p4: Point, normalArray: Point[], reversed: boolean = false) => {
+const buildQuad = (
+  p1: Point,
+  p2: Point,
+  p3: Point,
+  p4: Point,
+  normalArray: number[],
+  reversed: boolean = false,
+) => {
   const temp1 = vec.sub(p2, p1);
   const temp2 = vec.sub(p4, p1);
   const normalDir = reversed ? -1 : 1;
@@ -62,13 +69,34 @@ const buildQuad = (p1: Point, p2: Point, p3: Point, p4: Point, normalArray: Poin
 const buildHollowTriangle = (
   innerTriangle: TrianglePoints,
   outerTriangle: TrianglePoints,
-  normalArray: Point[],
+  normalArray: number[],
   reversed: boolean = false,
 ) => {
   return [
-    ...buildQuad(outerTriangle.v1, innerTriangle.v1, innerTriangle.v2, outerTriangle.v2, normalArray, reversed),
-    ...buildQuad(outerTriangle.v2, innerTriangle.v2, innerTriangle.v3, outerTriangle.v3, normalArray, reversed),
-    ...buildQuad(outerTriangle.v3, innerTriangle.v3, innerTriangle.v1, outerTriangle.v1, normalArray, reversed),
+    ...buildQuad(
+      outerTriangle.v1,
+      innerTriangle.v1,
+      innerTriangle.v2,
+      outerTriangle.v2,
+      normalArray,
+      reversed,
+    ),
+    ...buildQuad(
+      outerTriangle.v2,
+      innerTriangle.v2,
+      innerTriangle.v3,
+      outerTriangle.v3,
+      normalArray,
+      reversed,
+    ),
+    ...buildQuad(
+      outerTriangle.v3,
+      innerTriangle.v3,
+      innerTriangle.v1,
+      outerTriangle.v1,
+      normalArray,
+      reversed,
+    ),
   ];
 };
 
@@ -76,7 +104,12 @@ const buildHollowTriangle = (
  * @param t1 the first triangle to be connected
  * @param t2 the second triangle to be connected
  */
-const buildTriangleConnector = (t1: TrianglePoints, t2: TrianglePoints, normalArray: Point[], reversed: boolean = false) => {
+const buildTriangleConnector = (
+  t1: TrianglePoints,
+  t2: TrianglePoints,
+  normalArray: number[],
+  reversed: boolean = false,
+) => {
   return [
     ...buildQuad(t1.v1, t2.v1, t2.v3, t1.v3, normalArray, reversed),
     ...buildQuad(t1.v3, t2.v3, t2.v2, t1.v2, normalArray, reversed),
@@ -125,7 +158,7 @@ const vsTriangleCenter = [
   }, // far right
 ];
 
-let triangularPrismNormals = [];
+let triangularPrismNormals: number[] = [];
 // prettier-ignore
 const triangularPrismPoints = [
   // Top triangle structure
@@ -158,5 +191,5 @@ const triangularPrismPoints = [
 
 export default {
   points: triangularPrismPoints,
-  normals: triangularPrismNormals
+  normals: triangularPrismNormals,
 };

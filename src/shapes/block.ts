@@ -43,13 +43,18 @@ class Block extends Shape {
     this.points = [
       // front - back
       ...createSquare2D([-lenmt, heimt, halfwid], [lenmt, heimt, halfwid], [lenmt, -heimt, halfwid], [-lenmt, -heimt, halfwid], halfthicc, "front"),
+      ...createSquare2D([-lenmt, heimt, halfwid-thickness], [lenmt, heimt, halfwid-thickness], [lenmt, -heimt, halfwid-thickness], [-lenmt, -heimt, halfwid-thickness], halfthicc, "front"),
       ...createSquare2D([-lenmt, heimt, -halfwid], [lenmt, heimt, -halfwid], [lenmt, -heimt, -halfwid], [-lenmt, -heimt, -halfwid], halfthicc, "front"),
+      ...createSquare2D([-lenmt, heimt, -halfwid + thickness], [lenmt, heimt, -halfwid+ thickness], [lenmt, -heimt, -halfwid+ thickness], [-lenmt, -heimt, -halfwid+ thickness], halfthicc, "front"),
+
       // sides
       ...createSquare2D([-halflen, heimt, widmt], [-halflen, heimt, -widmt], [-halflen, -heimt, -widmt], [-halflen, -heimt, widmt], halfthicc, "side"),
+      ...createSquare2D([-halflen+thickness, heimt, widmt], [-halflen+thickness, heimt, -widmt], [-halflen+thickness, -heimt, -widmt], [-halflen+thickness, -heimt, widmt], halfthicc, "side"),
       ...createSquare2D([halflen, heimt, widmt], [halflen, heimt, -widmt], [halflen, -heimt, -widmt], [halflen, -heimt, widmt], halfthicc, "side"),
+      ...createSquare2D([halflen - thickness, heimt, widmt], [halflen- thickness, heimt, -widmt], [halflen- thickness, -heimt, -widmt], [halflen- thickness, -heimt, widmt], halfthicc, "side"),
       // bottom - top
-      ...createSquare2D([-lenmt, halfhei, -widmt], [lenmt, halfhei, -widmt], [lenmt, halfhei, widmt], [-lenmt, halfhei, widmt], halfthicc, "ground"),
-      ...createSquare2D([-lenmt, -halfhei, -widmt], [lenmt, -halfhei, -widmt], [lenmt, -halfhei, widmt], [-lenmt, -halfhei, widmt], halfthicc, "ground"),
+      ...createSquare2D([-lenmt, halfhei-thickness, -widmt], [lenmt, halfhei-thickness, -widmt], [lenmt, halfhei-thickness, widmt], [-lenmt, halfhei-thickness, widmt], halfthicc, "ground"),
+      ...createSquare2D([-lenmt, -halfhei + thickness, -widmt], [lenmt, -halfhei + thickness, -widmt], [lenmt, -halfhei + thickness, widmt], [-lenmt, -halfhei + thickness, widmt], halfthicc, "ground"),
     ]
   }
 
@@ -59,7 +64,7 @@ class Block extends Shape {
     // loop to draw cube side(rusuk), each as a rectangle.
     // To draw a rectangle needs 4 points, and each cube' face(sisi) has 4 side,
     // In total 6 faces x 4 sides = 24.
-    for (var i = 0; i < 24; i++) {
+    for (var i = 0; i < this.points.length / this.dimention; i++) {
       this.render(this.gl.TRIANGLE_FAN, 4 * i, 4);
     }
   }

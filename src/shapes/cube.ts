@@ -29,10 +29,26 @@ class Cube extends Shape {
         "front",
       ),
       ...createSquare2D(
+        [-sizemt, sizemt, halfSize - this.thickness],
+        [sizemt, sizemt, halfSize - this.thickness],
+        [sizemt, -sizemt, halfSize - this.thickness],
+        [-sizemt, -sizemt, halfSize - this.thickness],
+        halfThicc,
+        "front",
+      ),
+      ...createSquare2D(
         [-sizemt, sizemt, -halfSize],
         [sizemt, sizemt, -halfSize],
         [sizemt, -sizemt, -halfSize],
         [-sizemt, -sizemt, -halfSize],
+        halfThicc,
+        "front",
+      ),
+      ...createSquare2D(
+        [-sizemt, sizemt, -halfSize + this.thickness],
+        [sizemt, sizemt, -halfSize + this.thickness],
+        [sizemt, -sizemt, -halfSize + this.thickness],
+        [-sizemt, -sizemt, -halfSize + this.thickness],
         halfThicc,
         "front",
       ),
@@ -46,10 +62,26 @@ class Cube extends Shape {
         "side",
       ),
       ...createSquare2D(
+        [-halfSize + this.thickness, sizemt, sizemt],
+        [-halfSize + this.thickness, sizemt, -sizemt],
+        [-halfSize + this.thickness, -sizemt, -sizemt],
+        [-halfSize + this.thickness, -sizemt, sizemt],
+        halfThicc,
+        "side",
+      ),
+      ...createSquare2D(
         [halfSize, sizemt, sizemt],
         [halfSize, sizemt, -sizemt],
         [halfSize, -sizemt, -sizemt],
         [halfSize, -sizemt, sizemt],
+        halfThicc,
+        "side",
+      ),
+      ...createSquare2D(
+        [halfSize - this.thickness, sizemt, sizemt],
+        [halfSize - this.thickness, sizemt, -sizemt],
+        [halfSize - this.thickness, -sizemt, -sizemt],
+        [halfSize - this.thickness, -sizemt, sizemt],
         halfThicc,
         "side",
       ),
@@ -63,10 +95,26 @@ class Cube extends Shape {
         "ground",
       ),
       ...createSquare2D(
+        [-sizemt, halfSize - this.thickness, -sizemt],
+        [sizemt, halfSize - this.thickness, -sizemt],
+        [sizemt, halfSize - this.thickness, sizemt],
+        [-sizemt, halfSize - this.thickness, sizemt],
+        halfThicc,
+        "ground",
+      ),
+      ...createSquare2D(
         [-sizemt, -halfSize, -sizemt],
         [sizemt, -halfSize, -sizemt],
         [sizemt, -halfSize, sizemt],
         [-sizemt, -halfSize, sizemt],
+        halfThicc,
+        "ground",
+      ),
+      ...createSquare2D(
+        [-sizemt, -halfSize + this.thickness, -sizemt],
+        [sizemt, -halfSize + this.thickness, -sizemt],
+        [sizemt, -halfSize + this.thickness, sizemt],
+        [-sizemt, -halfSize + this.thickness, sizemt],
         halfThicc,
         "ground",
       ),
@@ -80,7 +128,7 @@ class Cube extends Shape {
     // loop to draw cube side(rusuk), each as a rectangle.
     // To draw a rectangle needs 4 points, and each cube' face(sisi) has 4 side,
     // In total 6 faces x 4 sides = 24.
-    for (var i = 0; i < 24; i++) {
+    for (var i = 0; i < this.points.length / this.dimention; i++) {
       this.render(this.gl.TRIANGLE_FAN, 4 * i, 4);
     }
   }
