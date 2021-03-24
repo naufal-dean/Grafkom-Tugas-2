@@ -1,7 +1,7 @@
 import App from "./app";
 import Cube from "./shapes/cube";
 import Block from "./shapes/block";
-import {triangularPrism} from "./shapes/initialPoints";
+import { triangularPrism } from "./shapes/initialPoints";
 import TriangularPrism from "./shapes/triangularPrism";
 import Shape from "./shapes/shape";
 
@@ -19,18 +19,18 @@ function initShape(shapeName: ShapeType): Shape {
       break;
     case "prism":
       obj = new TriangularPrism(canvas);
-
       obj.setPoints(...triangularPrism.points);
-      obj.setNormals(...triangularPrism.normals);
+      obj.setNormals(...triangularPrism.normals)
       break;
   }
-  obj.setUseShading(document.getElementById("shading").checked);
+  const shadingElmt = document.getElementById("shading") as HTMLInputElement;
+  obj.setUseShading(shadingElmt.checked);
   return obj;
 }
 
 // Init default shapes
 // change this to prism later
-const defaultObj = initShape("prism");
+const defaultObj = initShape("cube");
 
 // Init app
 const app = new App();
@@ -82,7 +82,7 @@ camResetBtn.addEventListener("click", () => {
   app.resetCamera();
 });
 
-const shadingToggle = document.getElementById("shading") as HTMLCanvasElement;
+const shadingToggle = document.getElementById("shading") as HTMLInputElement;
 shadingToggle.addEventListener("change", () => {
   app.toggleShading(shadingToggle.checked);
 });

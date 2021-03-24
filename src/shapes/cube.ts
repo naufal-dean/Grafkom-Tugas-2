@@ -1,4 +1,4 @@
-import {createSquare2D} from "./initialPoints/util";
+import { createSquare2D } from "./initialPoints/util";
 import Shape from "./shape";
 
 class Cube extends Shape {
@@ -17,9 +17,10 @@ class Cube extends Shape {
     const halfThicc = this.thickness / 2;
     // half size min half thickness
     const sizemt = halfSize - halfThicc;
+    const normalArr: number[] = [];
 
     this.points = [
-      // front - back
+      // front
       ...createSquare2D(
         [-sizemt, sizemt, halfSize],
         [sizemt, sizemt, halfSize],
@@ -27,6 +28,8 @@ class Cube extends Shape {
         [-sizemt, -sizemt, halfSize],
         halfThicc,
         "front",
+        normalArr,
+        true
       ),
       ...createSquare2D(
         [-sizemt, sizemt, halfSize - this.thickness],
@@ -35,7 +38,10 @@ class Cube extends Shape {
         [-sizemt, -sizemt, halfSize - this.thickness],
         halfThicc,
         "front",
+        normalArr,
+        false
       ),
+      // back
       ...createSquare2D(
         [-sizemt, sizemt, -halfSize],
         [sizemt, sizemt, -halfSize],
@@ -43,6 +49,8 @@ class Cube extends Shape {
         [-sizemt, -sizemt, -halfSize],
         halfThicc,
         "front",
+        normalArr,
+        false
       ),
       ...createSquare2D(
         [-sizemt, sizemt, -halfSize + this.thickness],
@@ -51,8 +59,10 @@ class Cube extends Shape {
         [-sizemt, -sizemt, -halfSize + this.thickness],
         halfThicc,
         "front",
+        normalArr,
+        true
       ),
-      // sides
+      // left
       ...createSquare2D(
         [-halfSize, sizemt, sizemt],
         [-halfSize, sizemt, -sizemt],
@@ -60,6 +70,8 @@ class Cube extends Shape {
         [-halfSize, -sizemt, sizemt],
         halfThicc,
         "side",
+        normalArr,
+        false
       ),
       ...createSquare2D(
         [-halfSize + this.thickness, sizemt, sizemt],
@@ -68,7 +80,10 @@ class Cube extends Shape {
         [-halfSize + this.thickness, -sizemt, sizemt],
         halfThicc,
         "side",
+        normalArr,
+        true
       ),
+      // right
       ...createSquare2D(
         [halfSize, sizemt, sizemt],
         [halfSize, sizemt, -sizemt],
@@ -76,6 +91,8 @@ class Cube extends Shape {
         [halfSize, -sizemt, sizemt],
         halfThicc,
         "side",
+        normalArr,
+        true
       ),
       ...createSquare2D(
         [halfSize - this.thickness, sizemt, sizemt],
@@ -84,8 +101,10 @@ class Cube extends Shape {
         [halfSize - this.thickness, -sizemt, sizemt],
         halfThicc,
         "side",
+        normalArr,
+        false
       ),
-      // bottom - top
+      // top
       ...createSquare2D(
         [-sizemt, halfSize, -sizemt],
         [sizemt, halfSize, -sizemt],
@@ -93,6 +112,8 @@ class Cube extends Shape {
         [-sizemt, halfSize, sizemt],
         halfThicc,
         "ground",
+        normalArr,
+        false
       ),
       ...createSquare2D(
         [-sizemt, halfSize - this.thickness, -sizemt],
@@ -101,7 +122,10 @@ class Cube extends Shape {
         [-sizemt, halfSize - this.thickness, sizemt],
         halfThicc,
         "ground",
+        normalArr,
+        true
       ),
+      //bottom
       ...createSquare2D(
         [-sizemt, -halfSize, -sizemt],
         [sizemt, -halfSize, -sizemt],
@@ -109,6 +133,8 @@ class Cube extends Shape {
         [-sizemt, -halfSize, sizemt],
         halfThicc,
         "ground",
+        normalArr,
+        true
       ),
       ...createSquare2D(
         [-sizemt, -halfSize + this.thickness, -sizemt],
@@ -117,8 +143,12 @@ class Cube extends Shape {
         [-sizemt, -halfSize + this.thickness, sizemt],
         halfThicc,
         "ground",
+        normalArr,
+        false
       ),
     ];
+    this.setNormals(...normalArr);
+    this.changeNormal(normalArr);
   }
   public draw() {
     const vertexData = this.points;

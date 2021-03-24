@@ -1,5 +1,5 @@
-import {mat4} from "../util/matrix";
-import {createSquare2D} from "./initialPoints/util";
+import { mat4 } from "../util/matrix";
+import { createSquare2D } from "./initialPoints/util";
 import Shape from "./shape";
 
 class Block extends Shape {
@@ -30,7 +30,7 @@ class Block extends Shape {
   }
 
   setupPoints() {
-    const {width, height, length, thickness} = this;
+    const { width, height, length, thickness } = this;
     // length min thickness, len plus thickness, and so on...
     const halflen = length / 2;
     const halfhei = height / 2;
@@ -39,31 +39,36 @@ class Block extends Shape {
     const lenmt = halflen - halfthicc;
     const heimt = halfhei - halfthicc;
     const widmt = halfwid - halfthicc;
+    const normalArr: number[] = []
     //prettier-ignore
     this.points = [
-      // front - back
-      ...createSquare2D([-lenmt, heimt, halfwid], [lenmt, heimt, halfwid], [lenmt, -heimt, halfwid], [-lenmt, -heimt, halfwid], halfthicc, "front"),
-      ...createSquare2D([-lenmt, heimt, halfwid-thickness], [lenmt, heimt, halfwid-thickness], [lenmt, -heimt, halfwid-thickness], [-lenmt, -heimt, halfwid-thickness], halfthicc, "front"),
-      ...createSquare2D([-lenmt, heimt, -halfwid], [lenmt, heimt, -halfwid], [lenmt, -heimt, -halfwid], [-lenmt, -heimt, -halfwid], halfthicc, "front"),
-      ...createSquare2D([-lenmt, heimt, -halfwid + thickness], [lenmt, heimt, -halfwid+ thickness], [lenmt, -heimt, -halfwid+ thickness], [-lenmt, -heimt, -halfwid+ thickness], halfthicc, "front"),
+      // front 
+      ...createSquare2D([-lenmt, heimt, halfwid], [lenmt, heimt, halfwid], [lenmt, -heimt, halfwid], [-lenmt, -heimt, halfwid], halfthicc, "front", normalArr),
+      ...createSquare2D([-lenmt, heimt, halfwid - thickness], [lenmt, heimt, halfwid - thickness], [lenmt, -heimt, halfwid - thickness], [-lenmt, -heimt, halfwid - thickness], halfthicc, "front", normalArr, false),
+      // back
+      ...createSquare2D([-lenmt, heimt, -halfwid], [lenmt, heimt, -halfwid], [lenmt, -heimt, -halfwid], [-lenmt, -heimt, -halfwid], halfthicc, "front", normalArr, false),
+      ...createSquare2D([-lenmt, heimt, -halfwid + thickness], [lenmt, heimt, -halfwid + thickness], [lenmt, -heimt, -halfwid + thickness], [-lenmt, -heimt, -halfwid + thickness], halfthicc, "front", normalArr, true),
 
-      // sides
-      ...createSquare2D([-halflen, heimt, widmt], [-halflen, heimt, -widmt], [-halflen, -heimt, -widmt], [-halflen, -heimt, widmt], halfthicc, "side"),
-      ...createSquare2D([-halflen+thickness, heimt, widmt], [-halflen+thickness, heimt, -widmt], [-halflen+thickness, -heimt, -widmt], [-halflen+thickness, -heimt, widmt], halfthicc, "side"),
-      ...createSquare2D([halflen, heimt, widmt], [halflen, heimt, -widmt], [halflen, -heimt, -widmt], [halflen, -heimt, widmt], halfthicc, "side"),
-      ...createSquare2D([halflen - thickness, heimt, widmt], [halflen- thickness, heimt, -widmt], [halflen- thickness, -heimt, -widmt], [halflen- thickness, -heimt, widmt], halfthicc, "side"),
-      // bottom - top
-      ...createSquare2D([-lenmt, halfhei-thickness, -widmt], [lenmt, halfhei-thickness, -widmt], [lenmt, halfhei-thickness, widmt], [-lenmt, halfhei-thickness, widmt], halfthicc, "ground"),
-      ...createSquare2D([-lenmt, -halfhei + thickness, -widmt], [lenmt, -halfhei + thickness, -widmt], [lenmt, -halfhei + thickness, widmt], [-lenmt, -halfhei + thickness, widmt], halfthicc, "ground"),
+      // left
+      ...createSquare2D([-halflen, heimt, widmt], [-halflen, heimt, -widmt], [-halflen, -heimt, -widmt], [-halflen, -heimt, widmt], halfthicc, "side", normalArr, false),
+      ...createSquare2D([-halflen + thickness, heimt, widmt], [-halflen + thickness, heimt, -widmt], [-halflen + thickness, -heimt, -widmt], [-halflen + thickness, -heimt, widmt], halfthicc, "side", normalArr, true),
+      // right
+      ...createSquare2D([halflen, heimt, widmt], [halflen, heimt, -widmt], [halflen, -heimt, -widmt], [halflen, -heimt, widmt], halfthicc, "side", normalArr),
+      ...createSquare2D([halflen - thickness, heimt, widmt], [halflen - thickness, heimt, -widmt], [halflen - thickness, -heimt, -widmt], [halflen - thickness, -heimt, widmt], halfthicc, "side", normalArr, false),
+      // top
+      ...createSquare2D([-lenmt, halfhei - thickness, -widmt], [lenmt, halfhei - thickness, -widmt], [lenmt, halfhei - thickness, widmt], [-lenmt, halfhei - thickness, widmt], halfthicc, "ground", normalArr, true),
+      ...createSquare2D([-lenmt, halfhei, -widmt], [lenmt, halfhei, -widmt], [lenmt, halfhei, widmt], [-lenmt, halfhei, widmt], halfthicc, "ground", normalArr, false),
+      // bottom
+      ...createSquare2D([-lenmt, -halfhei + thickness, -widmt], [lenmt, -halfhei + thickness, -widmt], [lenmt, -halfhei + thickness, widmt], [-lenmt, -halfhei + thickness, widmt], halfthicc, "ground", normalArr, false),
+      ...createSquare2D([-lenmt, -halfhei, -widmt], [lenmt, -halfhei, -widmt], [lenmt, -halfhei, widmt], [-lenmt, -halfhei, widmt], halfthicc, "ground", normalArr, true),
     ]
+    this.setNormals(...normalArr);
+    this.changeNormal(normalArr);
   }
 
   public draw() {
     this.changePosition(this.points);
 
-    // loop to draw cube side(rusuk), each as a rectangle.
-    // To draw a rectangle needs 4 points, and each cube' face(sisi) has 4 side,
-    // In total 6 faces x 4 sides = 24.
     for (var i = 0; i < this.points.length / this.dimention; i++) {
       this.render(this.gl.TRIANGLE_FAN, 4 * i, 4);
     }

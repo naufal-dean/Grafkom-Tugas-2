@@ -1,5 +1,5 @@
-import {toCartesian} from "../util/convert";
-import {mat4} from "../util/matrix";
+import { toCartesian } from "../util/convert";
+import { mat4 } from "../util/matrix";
 
 abstract class Shape {
   // Webgl properties
@@ -245,7 +245,7 @@ abstract class Shape {
   }
 
   changePosition(vertexData: number[]) {
-    const {gl, program} = this;
+    const { gl, program } = this;
     const buffer = gl.createBuffer();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -260,7 +260,7 @@ abstract class Shape {
   }
 
   changeNormal(normalData: number[]) {
-    const {gl, program} = this;
+    const { gl, program } = this;
     const buffer = gl.createBuffer();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -275,7 +275,7 @@ abstract class Shape {
   }
 
   setPhongProperties() {
-    const {gl, program} = this;
+    const { gl, program } = this;
 
     gl.uniform3fv(gl.getUniformLocation(program, "Id"), new Float32Array(this.Id));
     gl.uniform3fv(gl.getUniformLocation(program, "Is"), new Float32Array(this.Is));
@@ -294,7 +294,7 @@ abstract class Shape {
   }
 
   setUseShading(useShading: boolean) {
-    const {gl, program} = this;
+    const { gl, program } = this;
 
     this.useShading = useShading ? 1 : 0;
     gl.uniform1i(gl.getUniformLocation(program, "useShading"), this.useShading);
