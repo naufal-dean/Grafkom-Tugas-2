@@ -24,6 +24,7 @@ function initShape(shapeName: ShapeType): Shape {
       obj.setNormals(...triangularPrism.normals);
       break;
   }
+  obj.setUseShading(document.getElementById("shading").checked);
   return obj;
 }
 
@@ -81,9 +82,9 @@ camResetBtn.addEventListener("click", () => {
   app.resetCamera();
 });
 
-const shadingBtn = document.getElementById("shading-btn") as HTMLCanvasElement;
-shadingBtn.addEventListener("click", () => {
-  app.toogleShading();
+const shadingToggle = document.getElementById("shading") as HTMLCanvasElement;
+shadingToggle.addEventListener("change", () => {
+  app.toggleShading(shadingToggle.checked);
 });
 // Start app
 app.start();

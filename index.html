@@ -87,9 +87,6 @@
             <input type="range" min="0.1" max="10" value="1" step="0.1" class="slider" id="zoom" />
             <span id="zoom-value"></span>
           </div>
-          <div class="my-3">
-            <button class="btn btn-primary" id="shading-btn">Toggle Shading Mode</button>
-          </div>
           <button class="btn btn-dark" id="reset">Reset</button>
         </div>
 
@@ -118,6 +115,16 @@
           <button class="btn btn-dark" id="cam-reset">Reset</button>
         </div>
       </div>
+
+      <div class="card">
+        <div class="card-header">Shading</div>
+        <div class="card-body">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="shading" checked>
+            <label class="custom-control-label" for="shading">Use Shading</label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="modal fade" id="modal" tabindex="-1" role="dialog">
@@ -135,19 +142,19 @@
               <h5>Memilih Hollow Object</h5>
               <p>
                 Cara membuat hollow object adalah dengan memilih salah satu button yang disediakan
-                di menu, yaitu prism, cube, atau block
+                di section menu Pick Hollow Object, yaitu prism, cube, atau block
               </p>
             </li>
             <li>
-              <h5>Memilih Perspektif</h5>
+              <h5>Memilih Proyeksi</h5>
               <p>
-                Pilih perspektif dengan menekan salah satu tombol terkait tipe perspektif di menu
-                bagian perspektif
+                Pilih proyeksi dengan menekan salah satu tombol terkait tipe proyeksi di section
+                menu Projection
               </p>
             </li>
             <li>
               <h5>Mengedit Transformasi</h5>
-              <p>Ubah value transformasi dengan menggeser slider yang disediakan</p>
+              <p>Ubah value transformasi dengan menggeser slider yang disediakan di section menu Transformation</p>
               <p>
                 Selain itu, bisa juga menekan tombol reset, sehingga transformasi kembali ke awal
                 lagi
@@ -156,8 +163,17 @@
             <li>
               <h5>Mengubah kamera</h5>
               <p>
-                Ubah kamera dengan cara mengubah radius, theta, dan phi lalu bisa di reset ke awal
-                lagi
+                Ubah kamera dengan cara mengubah slider radius, theta, dan phi
+                di section menu Transformation
+              </p>
+              <p>
+                Selain itu, bisa juga menekan tombol reset, sehingga posisi kamera kembali ke awal lagi
+              </p>
+            </li>
+            <li>
+              <h5>Set shading ON atau OFF</h5>
+              <p>
+                Gunakan toggle Use Shading pada section menu Shading
               </p>
             </li>
           </ol>

@@ -53,7 +53,7 @@ abstract class Shape {
     this.calculateProjectionMatrix();
 
     this.setPhongProperties();
-    this.setUseShading(false);
+    this.setUseShading(true);
   }
 
   protected initMainShader(program: WebGLProgram) {
@@ -298,10 +298,6 @@ abstract class Shape {
 
     this.useShading = useShading ? 1 : 0;
     gl.uniform1i(gl.getUniformLocation(program, "useShading"), this.useShading);
-  }
-
-  public toggleShading() {
-    this.setUseShading(!this.useShading;);
   }
 
   createCompiledShader(type: number, sourceCode: string) {

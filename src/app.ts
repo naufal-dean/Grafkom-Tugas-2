@@ -106,8 +106,8 @@ class App {
     this.shape?.setProjection(projectionType);
   }
 
-  toogleShading() {
-    this.shape?.toggleShading();
+  toggleShading(useShading: boolean) {
+    this.shape?.setUseShading(useShading);
   }
 }
 
