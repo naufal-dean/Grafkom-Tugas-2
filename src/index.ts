@@ -1,7 +1,6 @@
 import App from "./app";
 import Cube from "./shapes/cube";
 import Block from "./shapes/block";
-import { triangularPrism } from "./shapes/initialPoints";
 import TriangularPrism from "./shapes/triangularPrism";
 import Shape from "./shapes/shape";
 
@@ -19,8 +18,6 @@ function initShape(shapeName: ShapeType): Shape {
       break;
     case "prism":
       obj = new TriangularPrism(canvas);
-      obj.setPoints(...triangularPrism.points);
-      obj.setNormals(...triangularPrism.normals)
       break;
   }
   const shadingElmt = document.getElementById("shading") as HTMLInputElement;

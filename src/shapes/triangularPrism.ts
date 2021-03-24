@@ -1,7 +1,17 @@
 import Shape from "./shape";
+import {buildTriangularPrismDatas} from "./initialPoints";
 
 class TriangularPrism extends Shape {
-  setupPoints() {}
+  constructor(canvas: HTMLCanvasElement) {
+    super(canvas);
+    this.setupPoints();
+  }
+
+  setupPoints() {
+    const triangularPrismDatas = buildTriangularPrismDatas();
+    this.points = triangularPrismDatas.points;
+    this.normals = triangularPrismDatas.normals;
+  }
 
   // override
   public draw() {

@@ -1,5 +1,5 @@
-import { createSquare2D } from "./initialPoints/util";
 import Shape from "./shape";
+import { buildCubeDatas } from "./initialPoints";
 
 class Cube extends Shape {
   constructor(canvas: HTMLCanvasElement, private size: number, private thickness: number) {
@@ -15,141 +15,12 @@ class Cube extends Shape {
   setupPoints() {
     const halfSize = this.size / 2;
     const halfThicc = this.thickness / 2;
-    // half size min half thickness
-    const sizemt = halfSize - halfThicc;
-    const normalArr: number[] = [];
 
-    this.points = [
-      // front
-      ...createSquare2D(
-        [-sizemt, sizemt, halfSize],
-        [sizemt, sizemt, halfSize],
-        [sizemt, -sizemt, halfSize],
-        [-sizemt, -sizemt, halfSize],
-        halfThicc,
-        "front",
-        normalArr,
-        true
-      ),
-      ...createSquare2D(
-        [-sizemt, sizemt, halfSize - this.thickness],
-        [sizemt, sizemt, halfSize - this.thickness],
-        [sizemt, -sizemt, halfSize - this.thickness],
-        [-sizemt, -sizemt, halfSize - this.thickness],
-        halfThicc,
-        "front",
-        normalArr,
-        false
-      ),
-      // back
-      ...createSquare2D(
-        [-sizemt, sizemt, -halfSize],
-        [sizemt, sizemt, -halfSize],
-        [sizemt, -sizemt, -halfSize],
-        [-sizemt, -sizemt, -halfSize],
-        halfThicc,
-        "front",
-        normalArr,
-        false
-      ),
-      ...createSquare2D(
-        [-sizemt, sizemt, -halfSize + this.thickness],
-        [sizemt, sizemt, -halfSize + this.thickness],
-        [sizemt, -sizemt, -halfSize + this.thickness],
-        [-sizemt, -sizemt, -halfSize + this.thickness],
-        halfThicc,
-        "front",
-        normalArr,
-        true
-      ),
-      // left
-      ...createSquare2D(
-        [-halfSize, sizemt, sizemt],
-        [-halfSize, sizemt, -sizemt],
-        [-halfSize, -sizemt, -sizemt],
-        [-halfSize, -sizemt, sizemt],
-        halfThicc,
-        "side",
-        normalArr,
-        false
-      ),
-      ...createSquare2D(
-        [-halfSize + this.thickness, sizemt, sizemt],
-        [-halfSize + this.thickness, sizemt, -sizemt],
-        [-halfSize + this.thickness, -sizemt, -sizemt],
-        [-halfSize + this.thickness, -sizemt, sizemt],
-        halfThicc,
-        "side",
-        normalArr,
-        true
-      ),
-      // right
-      ...createSquare2D(
-        [halfSize, sizemt, sizemt],
-        [halfSize, sizemt, -sizemt],
-        [halfSize, -sizemt, -sizemt],
-        [halfSize, -sizemt, sizemt],
-        halfThicc,
-        "side",
-        normalArr,
-        true
-      ),
-      ...createSquare2D(
-        [halfSize - this.thickness, sizemt, sizemt],
-        [halfSize - this.thickness, sizemt, -sizemt],
-        [halfSize - this.thickness, -sizemt, -sizemt],
-        [halfSize - this.thickness, -sizemt, sizemt],
-        halfThicc,
-        "side",
-        normalArr,
-        false
-      ),
-      // top
-      ...createSquare2D(
-        [-sizemt, halfSize, -sizemt],
-        [sizemt, halfSize, -sizemt],
-        [sizemt, halfSize, sizemt],
-        [-sizemt, halfSize, sizemt],
-        halfThicc,
-        "ground",
-        normalArr,
-        false
-      ),
-      ...createSquare2D(
-        [-sizemt, halfSize - this.thickness, -sizemt],
-        [sizemt, halfSize - this.thickness, -sizemt],
-        [sizemt, halfSize - this.thickness, sizemt],
-        [-sizemt, halfSize - this.thickness, sizemt],
-        halfThicc,
-        "ground",
-        normalArr,
-        true
-      ),
-      //bottom
-      ...createSquare2D(
-        [-sizemt, -halfSize, -sizemt],
-        [sizemt, -halfSize, -sizemt],
-        [sizemt, -halfSize, sizemt],
-        [-sizemt, -halfSize, sizemt],
-        halfThicc,
-        "ground",
-        normalArr,
-        true
-      ),
-      ...createSquare2D(
-        [-sizemt, -halfSize + this.thickness, -sizemt],
-        [sizemt, -halfSize + this.thickness, -sizemt],
-        [sizemt, -halfSize + this.thickness, sizemt],
-        [-sizemt, -halfSize + this.thickness, sizemt],
-        halfThicc,
-        "ground",
-        normalArr,
-        false
-      ),
-    ];
-    this.setNormals(...normalArr);
-    this.changeNormal(normalArr);
+    const cubeDatas = buildCubeDatas(halfSize, halfThicc, this.thickness);
+    this.changeNormal(cubeDatas.normalVector);
+    this.points = cubeDatas.points;
   }
+
   public draw() {
     const vertexData = this.points;
 

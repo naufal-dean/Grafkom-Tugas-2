@@ -1,13 +1,15 @@
-import {vec} from "../../util/vector";
-import {buildQuad } from "./util"
+import { buildQuad } from "./util";
 
 /*
  * Triangular Prism
  */
 
 // Type declaration
-// TODO: maybe can be reused
-type TrianglePoints = {v1: Point; v2: Point; v3: Point};
+type TrianglePoints = { v1: Point; v2: Point; v3: Point };
+interface ITrianglePoints {
+  inner: TrianglePoints[];
+  outer: TrianglePoints[];
+}
 
 /*
  * @param radius distance from (x,z)=(0,0) to vertices
@@ -33,7 +35,6 @@ const generateTrianglePoints = (
     v3: [x + radiusCos30, y, z - radiusSin30],
   };
 };
-
 
 /*
  * @param innerTriangle the inner hollow triangle boundary
@@ -91,79 +92,82 @@ const buildTriangleConnector = (
   ];
 };
 
-interface ITrianglePoints {
-  inner: TrianglePoints[];
-  outer: TrianglePoints[];
+const buildTriangularPrismDatas = () => {
+  // 8 triangle points to be used as reference
+  const trianglesPoints: ITrianglePoints = {
+    inner: [
+      generateTrianglePoints(0.4, 0.6),
+      generateTrianglePoints(0.4, 0.5),
+      generateTrianglePoints(0.4, -0.5),
+      generateTrianglePoints(0.4, -0.6),
+    ],
+    outer: [
+      generateTrianglePoints(0.6, 0.6),
+      generateTrianglePoints(0.6, 0.5),
+      generateTrianglePoints(0.6, -0.5),
+      generateTrianglePoints(0.6, -0.6),
+    ],
+  };
+
+  // Vertical structure triangle radius
+  // 0.2 = r + r*sin30
+  // r = 0.2 / (1 + sin30) = 0.2 / 1.5
+  const vsTriangleRadius = 0.2 / 1.5;
+
+  // Vertical structure triangle center for near, far left, and far right
+  const vsTriangleRadiusSin30 = vsTriangleRadius * 0.5;
+  const vsTriangleRadiusCos30 = vsTriangleRadius * 0.5 * Math.sqrt(3);
+  const vsTriangleCenter = [
+    { x: 0, z: 0.6 - vsTriangleRadius }, // near
+    {
+      x: trianglesPoints.outer[0].v2[0] + vsTriangleRadiusCos30,
+      z: trianglesPoints.outer[0].v2[2] + vsTriangleRadiusSin30,
+    }, // far left
+    {
+      x: trianglesPoints.outer[0].v3[0] - vsTriangleRadiusCos30,
+      z: trianglesPoints.outer[0].v3[2] + vsTriangleRadiusSin30,
+    }, // far right
+  ];
+
+  // Normals
+  let triangularPrismNormals: number[] = [];
+
+  // Points
+  // prettier-ignore
+  const triangularPrismPoints = [
+    // Top triangle structure
+    ...buildHollowTriangle(trianglesPoints.inner[0], trianglesPoints.outer[0], triangularPrismNormals),
+    ...buildHollowTriangle(trianglesPoints.inner[1], trianglesPoints.outer[1], triangularPrismNormals, true),
+    ...buildTriangleConnector(trianglesPoints.inner[0], trianglesPoints.inner[1], triangularPrismNormals, true),
+    ...buildTriangleConnector(trianglesPoints.outer[0], trianglesPoints.outer[1], triangularPrismNormals),
+    // Bottom triangle structure
+    ...buildHollowTriangle(trianglesPoints.inner[2], trianglesPoints.outer[2], triangularPrismNormals),
+    ...buildHollowTriangle(trianglesPoints.inner[3], trianglesPoints.outer[3], triangularPrismNormals, true),
+    ...buildTriangleConnector(trianglesPoints.inner[2], trianglesPoints.inner[3], triangularPrismNormals, true),
+    ...buildTriangleConnector(trianglesPoints.outer[2], trianglesPoints.outer[3], triangularPrismNormals),
+    // Vertical structure
+    ...buildTriangleConnector(
+      generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[0].x, vsTriangleCenter[0].z),
+      generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[0].x, vsTriangleCenter[0].z),
+      triangularPrismNormals
+    ),
+    ...buildTriangleConnector(
+      generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[1].x, vsTriangleCenter[1].z),
+      generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[1].x, vsTriangleCenter[1].z),
+      triangularPrismNormals
+    ),
+    ...buildTriangleConnector(
+      generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[2].x, vsTriangleCenter[2].z),
+      generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[2].x, vsTriangleCenter[2].z),
+      triangularPrismNormals
+    ),
+  ];
+
+  // Return
+  return {
+    points: triangularPrismPoints,
+    normals: triangularPrismNormals,
+  };
 }
 
-// 8 triangle points to be used as reference
-const trianglesPoints: ITrianglePoints = {
-  inner: [
-    generateTrianglePoints(0.4, 0.6),
-    generateTrianglePoints(0.4, 0.5),
-    generateTrianglePoints(0.4, -0.5),
-    generateTrianglePoints(0.4, -0.6),
-  ],
-  outer: [
-    generateTrianglePoints(0.6, 0.6),
-    generateTrianglePoints(0.6, 0.5),
-    generateTrianglePoints(0.6, -0.5),
-    generateTrianglePoints(0.6, -0.6),
-  ],
-};
-
-// Vertical structure triangle radius
-// 0.2 = r + r*sin30
-// r = 0.2 / (1 + sin30) = 0.2 / 1.5
-const vsTriangleRadius = 0.2 / 1.5;
-
-// Vertical structure triangle center for near, far left, and far right
-const vsTriangleRadiusSin30 = vsTriangleRadius * 0.5;
-const vsTriangleRadiusCos30 = vsTriangleRadius * 0.5 * Math.sqrt(3);
-const vsTriangleCenter = [
-  {x: 0, z: 0.6 - vsTriangleRadius}, // near
-  {
-    x: trianglesPoints.outer[0].v2[0] + vsTriangleRadiusCos30,
-    z: trianglesPoints.outer[0].v2[2] + vsTriangleRadiusSin30,
-  }, // far left
-  {
-    x: trianglesPoints.outer[0].v3[0] - vsTriangleRadiusCos30,
-    z: trianglesPoints.outer[0].v3[2] + vsTriangleRadiusSin30,
-  }, // far right
-];
-
-let triangularPrismNormals: number[] = [];
-// prettier-ignore
-const triangularPrismPoints = [
-  // Top triangle structure
-  ...buildHollowTriangle(trianglesPoints.inner[0], trianglesPoints.outer[0], triangularPrismNormals),
-  ...buildHollowTriangle(trianglesPoints.inner[1], trianglesPoints.outer[1], triangularPrismNormals, true),
-  ...buildTriangleConnector(trianglesPoints.inner[0], trianglesPoints.inner[1], triangularPrismNormals, true),
-  ...buildTriangleConnector(trianglesPoints.outer[0], trianglesPoints.outer[1], triangularPrismNormals),
-  // Bottom triangle structure
-  ...buildHollowTriangle(trianglesPoints.inner[2], trianglesPoints.outer[2], triangularPrismNormals),
-  ...buildHollowTriangle(trianglesPoints.inner[3], trianglesPoints.outer[3], triangularPrismNormals, true),
-  ...buildTriangleConnector(trianglesPoints.inner[2], trianglesPoints.inner[3], triangularPrismNormals, true),
-  ...buildTriangleConnector(trianglesPoints.outer[2], trianglesPoints.outer[3], triangularPrismNormals),
-  // Vertical structure
-  ...buildTriangleConnector(
-    generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[0].x, vsTriangleCenter[0].z),
-    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[0].x, vsTriangleCenter[0].z),
-    triangularPrismNormals
-  ),
-  ...buildTriangleConnector(
-    generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[1].x, vsTriangleCenter[1].z),
-    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[1].x, vsTriangleCenter[1].z),
-    triangularPrismNormals
-  ),
-  ...buildTriangleConnector(
-    generateTrianglePoints(vsTriangleRadius, 0.5, vsTriangleCenter[2].x, vsTriangleCenter[2].z),
-    generateTrianglePoints(vsTriangleRadius, -0.5, vsTriangleCenter[2].x, vsTriangleCenter[2].z),
-    triangularPrismNormals
-  ),
-];
-
-export default {
-  points: triangularPrismPoints,
-  normals: triangularPrismNormals,
-};
+export default buildTriangularPrismDatas;
