@@ -27,7 +27,7 @@ function initShape(shapeName: ShapeType): Shape {
 
 // Init default shapes
 // change this to prism later
-const defaultObj = initShape("cube");
+const defaultObj = initShape("prism");
 
 // Init app
 const app = new App();
