@@ -5,14 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grafkom Tubes-2</title>
-    <link rel="stylesheet" href="bootstrap.min.css" />
-    <link rel="stylesheet" href="./styles.css" />
-    <script src="./jquery-3.3.1.slim.min.js"></script>
-    <script src="./popper.min.js"></script>
-    <script src="./bootstrap.min.js"></script>
-    <script src="./src/index.ts" defer></script>
+    <link rel="stylesheet" href="./bootstrap.min.256a7d47.css" />
+    <link rel="stylesheet" href="./styles.0505b202.css" />
+    <script src="./jquery-3.3.1.slim.min.4a2d5f5e.js"></script>
+    <script src="./popper.min.5bde9d7f.js"></script>
+    <script src="./bootstrap.min.76a35bf3.js"></script>
+    <script src="./src.fcfb948d.js" defer></script>
   </head>
-
   <body class="pt-5">
     <div class="container d-flex">
       <div class="mr-5">
@@ -23,7 +22,6 @@
         <div class="card">
           <div class="card-header d-flex justify-content-between">
             <h4>Need Help?</h4>
-
             <button
               class="btn btn-success ml-auto"
               id="help"
@@ -42,7 +40,6 @@
             <button class="btn btn-dark" id="block">Block</button>
           </div>
         </div>
-
         <div class="card">
           <div class="card-header">Perspective</div>
           <div class="card-body">
@@ -51,42 +48,40 @@
             <button class="btn btn-dark" id="perspective">Perspective</button>
           </div>
         </div>
-
         <div class="card">
           <div class="card-header">Transformations</div>
           <div class="card-body">
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">x :</div>
               <input type="range" min="1" max="100" value="50" class="slider" id="x" />
               <span id="x-value"></span>
             </div>
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">y :</div>
               <input type="range" min="1" max="100" value="50" class="slider" id="y" />
               <span id="y-value"></span>
             </div>
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">z :</div>
               <input type="range" min="1" max="100" value="50" class="slider" id="z" />
               <span id="z-value"></span>
             </div>
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">rotate x :</div>
               <input type="range" min="0" max="360" value="0" class="slider" id="rotate-x" />
               <span id="rotate-x-value"></span>
             </div>
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">rotate y :</div>
               <input type="range" min="0" max="360" value="0" class="slider" id="rotate-y" />
               <span id="rotate-y-value"></span>
             </div>
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">rotate z :</div>
               <input type="range" min="0" max="360" value="0" class="slider" id="rotate-z" />
               <span id="rotate-z-value"></span>
             </div>
-
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">zoom</div>
               <input
                 type="range"
@@ -102,11 +97,10 @@
             <button class="btn btn-dark" id="reset">Reset</button>
           </div>
         </div>
-
         <div class="card">
           <div class="card-header">Camera</div>
           <div class="card-body">
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">radius :</div>
               <input
                 type="range"
@@ -119,27 +113,26 @@
               />
               <span id="cam-radius-value"></span>
             </div>
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">theta :</div>
               <input type="range" min="0" max="360" value="0" class="slider" id="cam-theta" />
               <span id="cam-theta-value"></span>
             </div>
-            <div class="form-group d-flex">
+            <div class="d-flex form-group">
               <div class="form-label mr-3">phi :</div>
               <input type="range" min="0" max="360" value="0" class="slider" id="cam-phi" />
               <span id="cam-phi-value"></span>
             </div>
-
             <button class="btn btn-dark" id="cam-reset">Reset</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+    <div class="fade modal" id="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h2 class="modal-title font-weight-bold" id="exampleModalLongTitle">Help</h2>
+            <h2 class="font-weight-bold modal-title" id="exampleModalLongTitle">Help</h2>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>

@@ -8,7 +8,7 @@
   "scripts": {
     "start": "parcel index.html",
     "dev": "parcel index.html",
-    "build": "parcel build index.html",
+    "build": "parcel build index.html --out-dir build",
     "coba": "parcel coba.html"
   },
   "devDependencies": {
